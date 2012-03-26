@@ -84,7 +84,7 @@ var drawCylinder= function (r,h,m,n,color) {
     var u = p[0];
     var w = p[1];
 
-    return [r * SIN(u), r * COS(u), w];
+    return [r * COS(u), r * SIN(u), w];
   }
   var mapped = MAP(cylinder)(domain);
 
@@ -92,3 +92,30 @@ var drawCylinder= function (r,h,m,n,color) {
   COLOR(color)(mapped);
 };
 drawCylinder(2,4,20,20,[0,0,0]);
+
+
+
+//sfera
+var drawSphere = function (r,n,m,color) {
+  var domain = DOMAIN([[0,PI],[0,2*PI]])([n,m]);
+
+  var trasla = function (p) {
+    var u = p[0];
+    var v = p[1];
+
+    return [u-(PI/2), v];
+  }
+  var traslato = MAP(trasla)(domain);
+
+  var sphere = function (p) {
+    var a = p[0];
+    var b = p[1];
+
+    return [r * COS(a) * SIN(b), r * COS(a) * COS(b), r * SIN(a)];
+  }
+  var mapped = MAP(sphere)(traslato);
+
+  DRAW(mapped);
+  COLOR(color)(mapped);
+};
+drawSphere(3,10,10,[0,1,0]);
