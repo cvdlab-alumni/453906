@@ -95,6 +95,27 @@ drawCylinder(2,4,20,20,[0,0,0]);
 
 
 
+//cono
+var drawCone= function (r,h,m,n,color) {
+  var domain = DOMAIN([[0,2*PI],[0,1]])([n,m]);
+
+  var cone = function (p) {
+    var u = p[0];
+    var v = p[1];
+
+    return [r * v * COS(u), r * v * SIN(u), h * v];
+  }
+  var mapped = MAP(cone)(domain);
+
+  DRAW(mapped);
+  COLOR(color)(mapped);
+};
+drawCone(2,4,20,20,[0,0,0]);
+
+
+
+
+
 //sfera
 var drawSphere = function (r,n,m,color) {
   var domain = DOMAIN([[0,PI],[0,2*PI]])([n,m]);
