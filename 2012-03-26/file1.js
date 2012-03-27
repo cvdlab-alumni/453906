@@ -1,11 +1,11 @@
 // dominio monodimensionale
-vad dom1 = DOMAIN([[1,3]])([2])
+var dom1 = DOMAIN([[1,3]])([2])
 
 //dominio bidimensionale
-vad dom2 = DOMAIN([[1,3][1,4]])([2,3])
+var dom2 = DOMAIN([[1,3][1,4]])([2,3])
 
 //dominio tridimensionale
-vad dom3 = DOMAIN([[1,3][1,4][1,2]])([2,3,1])
+var dom3 = DOMAIN([[1,3][1,4][1,2]])([2,3,1])
 
 //li disegno con DRAW(dom) e coloro con COLOR([r,g,b])(dom)
 
@@ -107,7 +107,7 @@ var drawCone= function (r,h,m,n,color) {
     var u = p[0];
     var v = p[1];
 
-    return [r * (1-v) * COS(u), r * (1-v) * SIN(u), h * v];
+    return [r * (1-v) * COS(u), r * (1-v) * SIN(u), h * v]; //sostituire "(1-v)" con "v" se si vuole il cono con la punta sull'origine
   }
   var mapped = MAP(cone)(domain);
 
