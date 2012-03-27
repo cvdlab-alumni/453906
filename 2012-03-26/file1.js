@@ -117,5 +117,30 @@ var drawSphere = function (r,n,m,color) {
 
   DRAW(mapped);
   COLOR(color)(mapped);
+
+  return mapped; // così lo posso nascondere con HIDE()
 };
 drawSphere(3,10,10,[0,1,0]);
+
+
+
+//toro ri raggio interno (buco), re raggio esterno, r1 raggio del tubo, r2 raggio dal centro del toro al centro del tubo
+var drawToro = function (ri,re,n,m,color) {
+  var r1=(re-ri)/2;
+  var r2=re-r1;
+  var domain = DOMAIN([[0,2*PI],[0,2*PI]])([n,m]);
+
+  var toro = function (p) {
+    var a = p[0];
+    var b = p[1];
+
+    return [(r2 + (r1 * COS(a))) * SIN(b),(r2 + (r1 * COS(a))) * COS(b),r1 * SIN(a)];
+  }
+  var mapped = MAP(toro)(domain);
+
+  DRAW(mapped);
+  COLOR(color)(mapped);
+
+  return mapped; // così lo posso nascondere con HIDE()
+};
+drawToro(1,3,10,10,[0,1,0]);
