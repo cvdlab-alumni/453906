@@ -72,6 +72,8 @@ var mapped = MAP(circle)(domain);
 
 DRAW(mapped);
 COLOR([0,0,0])(mapped);
+
+  return mapped;
 };
 drawCircle(3,100);
 
@@ -90,6 +92,8 @@ var drawCylinder= function (r,h,m,n,color) {
 
   DRAW(mapped);
   COLOR(color)(mapped);
+
+  return mapped;
 };
 drawCylinder(2,4,20,20,[0,0,0]);
 
@@ -103,12 +107,14 @@ var drawCone= function (r,h,m,n,color) {
     var u = p[0];
     var v = p[1];
 
-    return [r * v * COS(u), r * v * SIN(u), h * v];
+    return [r * (1-v) * COS(u), r * (1-v) * SIN(u), h * v];
   }
   var mapped = MAP(cone)(domain);
 
   DRAW(mapped);
   COLOR(color)(mapped);
+
+  return mapped;
 };
 drawCone(2,4,20,20,[0,0,0]);
 
@@ -162,6 +168,6 @@ var drawToro = function (ri,re,n,m,color) {
   DRAW(mapped);
   COLOR(color)(mapped);
 
-  return mapped; // così lo posso nascondere con HIDE()
+  return mapped;
 };
 drawToro(1,3,10,10,[0,1,0]);
