@@ -130,22 +130,22 @@ COLOR([0.99,0.99,0.99])(tetti);
 //2 improbabili tavolinetti da bar rotondi rossi istanziati davanti alle panche
 var pezzo1 = T([0])([-0.05])(SIMPLEX_GRID([[0.1],[0.4],[-0.75,0.05]]));
 var pezzi1 = [];
-for (var i = 0; i <= 90; i++) {
-  pezzi1[i] = R([2])(PI/45 * i)(pezzo1);
+for (var i = 0; i <= 36; i++) {
+  pezzi1[i] = R([2])(PI/18 * i)(pezzo1);
 };
 var piano = STRUCT(pezzi1);
 
 var pezzo2 = T([0])([-0.05])(SIMPLEX_GRID([[0.1],[0.05],[-0.1,0.65]]));
 var pezzi2 = [];
-for (var i = 0; i <= 90; i++) {
-  pezzi2[i] = R([2])(PI/45 * i)(pezzo2);
+for (var i = 0; i <= 36; i++) {
+  pezzi2[i] = R([2])(PI/18 * i)(pezzo2);
 };
 var gamba = STRUCT(pezzi2);
 
 var pezzo3 = T([0])([-0.05])(SIMPLEX_GRID([[0.1],[0.2],[0.1]]));
 var pezzi3 = [];
-for (var i = 0; i <= 90; i++) {
-  pezzi3[i] = R([2])(PI/45 * i)(pezzo3);
+for (var i = 0; i <= 36; i++) {
+  pezzi3[i] = R([2])(PI/18 * i)(pezzo3);
 };
 var piede = STRUCT(pezzi3);
 
