@@ -78,24 +78,39 @@ COLOR([0,0,0])(mapped);
 drawCircle(3,100);
 
 
-//cilindro raggio r, altezza h, n e m segmenti, colore color
-var drawCylinder= function (r,h,m,n,color) {
-  var domain = DOMAIN([[0,2*PI],[0,h]])([n,m]);
+//cilindro raggio r, altezza h, n risoluzione, colore color (opzionale default grigio), trasla [x,y,z] (opzionali)
+var drawCylinder = function (r,h,n,color,trasla) {
+  var domain = DOMAIN([[0,2*PI],[0,h]])([n,1]);
+
+  if (trasla === undefined) {
+    trasla = [];
+  };
+  var x = trasla[0] || 0;
+  var y = trasla[1] || 0;
+  var z = trasla[2] || 0;
+
+  if (color === undefined) { color = [1,1,1]; };
+  if (color[0] === undefined) { color[0] = 1; };
+  if (color[1] === undefined) { color[1] = 1; };
+  if (color[2] === undefined) { color[2] = 1; };
+  var rosso  = color[0];
+  var giallo = color[1];
+  var blu    = color[2];
 
   var cylinder = function (p) {
     var u = p[0];
     var w = p[1];
 
-    return [r * COS(u), r * SIN(u), w];
+    return [x + r * COS(u), y + r * SIN(u), z + w];
   }
-  var mapped = MAP(cylinder)(domain);
 
+  var mapped = MAP(cylinder)(domain);
   DRAW(mapped);
-  COLOR(color)(mapped);
+  COLOR([rosso,giallo,blu])(mapped);
 
   return mapped;
 };
-drawCylinder(2,4,20,20,[0,0,0]);
+var cilindo = drawCylinder(2,4,20,20,[0,1,0],[1,2,3]);
 
 
 
