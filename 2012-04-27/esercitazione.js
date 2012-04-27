@@ -34,4 +34,11 @@ var curve = MAP(curveMapping)(domain);
 DRAW(curve);
 
 
-//curva con SPLINE (curva a tratti) - congiunge punti (tranne primo e ultimo) con curve di Hermite con tangente parallela al vettore differenza tra il punto prima e il punto dopo (segmento che unisce punto precedente e successivo)
+//curva con SPLINE (curva a tratti)
+//congiunge punti (tranne primo e ultimo) con curve di Hermite con tangente parallela al vettore differenza tra il punto prima e il punto dopo (segmento che unisce punto precedente e successivo)
+//per avere anche punto iniziale e finale bisogna scriverli 2 volte
+var domain = INTERVALS(1)(20);
+var h = 1; // imposta lunghezza tangente ai punti.... influenza la "stondatura" delle curve. Default = 1
+var controlpoints = [[0,0],[0,0],[3,2],[4,-1],[7,3],[9,0],[11,1],[12,0],[12,0]];
+var splineCardinal = SPLINE(CUBIC_CARDINAL(domain,h))(controlpoints);
+DRAW(splineCardinal);
