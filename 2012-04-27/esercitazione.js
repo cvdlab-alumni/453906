@@ -9,3 +9,29 @@ DRAW(COLOR([1,0,0,0.5])(labyrinth));
 //tetto labirinto
 var roof = BOUNDARY(T([1,2])([-7,3])(CUBOID([9,7,0.5])));
 DRAW(COLOR([1,0,0,0.5])(roof));
+
+
+//curva con Hermite
+var domain = INTERVALS(1)(20);
+var controlpoints = [[0,0],[10,0],[0,10],[10,10]]; // p0,p1,t0,t1 dove t0 e t1 sono le tangenti ai punti p0 e p1 traslate nell'origine (indico le punte dei vettori)
+var curveMapping = CUBIC_HERMITE(S0)(controlpoints);
+var curve = MAP(curveMapping)(domain);
+DRAW(curve);
+
+
+//curva con BEZIER
+var domain = INTERVALS(1)(32);
+var controlpoints = [[0,0],[1,2],[3,2],[3,0],[5,-1],[6,1]]; //la curva inizia nel primo punto e finisce nell'ultimo ma non passa necessariamente negli altri punti. E' compresa nel guscio convesso dei punti e tangente al primo e ultimo segmento della spezzata che congiunge i punti
+var curveMapping = BEZIER(S0)(controlpoints);
+var curve = MAP(curveMapping)(domain);
+DRAW(curve);
+
+//curva con BEZIER in 3D
+var domain = INTERVALS(1)(32);
+var controlpoints = [[0,0,0],[1,2,1],[3,2,2],[3,0,3],[5,-1,-2],[6,1,-5]];
+var curveMapping = BEZIER(S0)(controlpoints);
+var curve = MAP(curveMapping)(domain);
+DRAW(curve);
+
+
+//curva con SPLINE (curva a tratti) - congiunge punti (tranne primo e ultimo) con curve di Hermite con tangente parallela al vettore differenza tra il punto prima e il punto dopo (segmento che unisce punto precedente e successivo)
