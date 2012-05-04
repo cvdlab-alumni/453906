@@ -37,8 +37,8 @@ var p2 = NUBS(S0)(2)(knots2)(puntiProfilo2);
 //var profilo2 = MAP(p2)(domain1);
 //DRAW(profilo2);
 
-var puntiProfilo3 = [[3.7,10,0+2*0.05],[0.4,10,0+2*0.05],[0.2,10,0+2*0.05],[0,10,0.1+2*0.05],
-          [0,10,0.4+2*0.05],[0.7,10,0.6+2*0.05],[1.1,10,0.6+2*0.05],[2,10,0.5+2*0.05],[3.7,10,0+2*0.05]];
+var puntiProfilo3 = [[3.7,10,0+10*0.05],[0.4,10,0+10*0.05],[0.2,10,0+10*0.05],[0,10,0.1+10*0.05],
+          [0,10,0.4+10*0.05],[0.7,10,0.6+10*0.05],[1.1,10,0.6+10*0.05],[2,10,0.5+10*0.05],[3.7,10,0+10*0.05]];
 var knots3 = nodi(puntiProfilo3);
 var p3 = NUBS(S0)(2)(knots3)(puntiProfilo3);
 //var profilo3 = MAP(p3)(domain1);
@@ -66,6 +66,8 @@ var p6 = NUBS(S0)(2)(knots6)(puntiProfilo6);
 //DRAW(profilo6);
 
 var domain2 = DOMAIN([[0,1],[0,1]])([20,30]);
-var ala = BEZIER(S1)([p1,p2,p3,p4,p5,p6,[2.5,12.5,0.075+12.5*0.05]]);
+var profiliAla = [p1,p2,p3,p4,p5,p6,[2.5,12.5,0.075+12.5*0.05]];
+var knotsAla = nodi(profiliAla);
+var ala = NUBS(S1)(2)(knotsAla)(profiliAla);
 var mappaAla = MAP(ala)(domain2);
 DRAW(mappaAla);
