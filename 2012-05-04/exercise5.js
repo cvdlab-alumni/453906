@@ -320,5 +320,5 @@ var pista = STRUCT([T([2])([-1]),asfalto,COLOR([1,1,1]),strisce1,strisce2,strisc
 
 
 //unisco in una struct e disegno
-var modello = STRUCT([T([0,1])([-70,-15])(pista),R([0,1])(PI),T([2])(2),ali,mappaFusoliera1,mappaFusoliera2,mappaFusoliera3,mappaFusolieraM,elicheMozzo,T([0,2])([11.9,2.0725]),mappaVerticalS,OrizontalStabilizers]);
+var modello = STRUCT([T([0,1])([-70,-15])(pista),R([0,1])(PI),T([2])([2]),ali,mappaFusoliera1,mappaFusoliera2,mappaFusoliera3,mappaFusolieraM,elicheMozzo,T([0,2])([11.9,2.0725]),mappaVerticalS,OrizontalStabilizers]);
 DRAW(modello);
