@@ -1,4 +1,4 @@
-//unisco insieme i pezzi del "DH53 Humming Bird"
+//"DH53 Humming Bird" sulla pista d'atterraggio
 
 function nodi (points) { //funzione che mi calcola i nodi a partire dai punti
   var m = points.length;
@@ -308,6 +308,17 @@ var mappaMozzo = MAP(mozzo)(domain2);
 var elicheMozzo = STRUCT([T([0,2])([-2.43,1.45]),eliche,mappaMozzo]);
 
 
+//pista d'atterraggio
+var asfalto = SIMPLEX_GRID([[30,30,20,40,30,30,10],[30],[0.9]]);
+var strisce1 = SIMPLEX_GRID([[-2,8],[-2,1.5,-0.5,1.5,-0.5,1.5,-0.5,1.5,-0.5,1.5,-0.5,1.5,-1.5,-1.5,1.5,-0.5,1.5,-0.5,1.5,-0.5,1.5,-0.5,1.5,-0.5,1.5],[1]]);
+var strisce2 = SIMPLEX_GRID([[-30,8,-22,8],[-4.75,1.5,-0.5,1.5,-0.5,1.5,-9.5,1.5,-0.5,1.5,-0.5,1.5],[1]]);
+var strisce3 = SIMPLEX_GRID([[-80,15],[-5.25,4.5,-10.5,4.5],[1]]);
+var strisce4 = SIMPLEX_GRID([[-120,8],[-5.75,1.5,-0.5,1.5,-11.5,1.5,-0.5,1.5],[1]]);
+var strisce5 = SIMPLEX_GRID([[-150,8,-22,8],[-6.75,1.5,-13.5,1.5],[1]]);
+var strisce6 = SIMPLEX_GRID([REPLICA([18])([-4,6]),[-14.5,1],[1]]);
+var pista = STRUCT([T([2])([-1]),asfalto,COLOR([1,1,1]),strisce1,strisce2,strisce3,strisce4,strisce5,T([0])([10]),strisce6]);
+
+
 //unisco in una struct e disegno
-var modello = STRUCT([ali,mappaFusoliera1,mappaFusoliera2,mappaFusoliera3,mappaFusolieraM,elicheMozzo,T([0,2])([11.9,2.0725]),mappaVerticalS,OrizontalStabilizers]);
+var modello = STRUCT([T([0,1])([-70,-15])(pista),R([0,1])(PI),T([2])(2),ali,mappaFusoliera1,mappaFusoliera2,mappaFusoliera3,mappaFusolieraM,elicheMozzo,T([0,2])([11.9,2.0725]),mappaVerticalS,OrizontalStabilizers]);
 DRAW(modello);
