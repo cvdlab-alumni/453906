@@ -1,4 +1,4 @@
-//"DH53 Humming Bird" sulla pista d'atterraggio
+//assemblo i pezzi del "DH53 Humming Bird"
 
 function nodi (points) { //funzione che mi calcola i nodi a partire dai punti
   var m = points.length;
@@ -20,7 +20,7 @@ function nodi (points) { //funzione che mi calcola i nodi a partire dai punti
 };
 
 
-//var domain1 = INTERVALS(1)(50);
+var domain1 = INTERVALS(1)(50);
 var domain2a = DOMAIN([[0,1],[0,1]])([20,30]);
 var domain2 = DOMAIN([[0,1],[0,1]])([30,10]);
 
@@ -305,7 +305,7 @@ var profiliMozzo = [[0.15,0,0],circle,circle,circle2,[-0.3,0,0]];
 var knotsMozzo = nodi(profiliMozzo);
 var mozzo = NUBS(S1)(2)(knotsMozzo)(profiliMozzo);
 var mappaMozzo = MAP(mozzo)(domain2);
-var elicheMozzo = STRUCT([T([0,2])([-2.43,1.45]),eliche,mappaMozzo]);
+var elicheMozzo = STRUCT([COLOR([0.7,0.6,0.5,1]),T([0,2])([-2.43,1.45]),eliche,mappaMozzo]);
 
 
 //MARMITTE
@@ -320,7 +320,7 @@ var elicheMozzo = STRUCT([T([0,2])([-2.43,1.45]),eliche,mappaMozzo]);
   }
 var mappaToro = MAP(quartoToro)(domain2);
 var mappaToroR = S([1])([-1])(MAP(quartoToro)(domain2));
-var marmitte = STRUCT([T([0,1,2])([-1.7,0.4,1.45]),mappaToro,T([2])([-0.3]),mappaToro,T([1,2])([-0.8,0.3]),mappaToroR,T([2])([-0.3]),mappaToroR]);
+var marmitte = STRUCT([COLOR([0.1,0.1,0.1,1]),T([0,1,2])([-1.7,0.4,1.45]),mappaToro,T([2])([-0.3]),mappaToro,T([1,2])([-0.8,0.3]),mappaToroR,T([2])([-0.3]),mappaToroR]);
 
 
 //RUOTE
@@ -333,7 +333,7 @@ var marmitte = STRUCT([T([0,1,2])([-1.7,0.4,1.45]),mappaToro,T([2])([-0.3]),mapp
     var r2=re-r1;
     return [(r2 + (r1 * COS(a))) * SIN(b),(r2 + (r1 * COS(a))) * COS(b),r1 * SIN(a)];
   };
-var ruota = MAP(toro)(domain2);
+var ruota = COLOR([0.1,0.1,0.1,1])(MAP(toro)(domain2));
 
 var cerchio1 = function (p) {
   var u = p[0];
@@ -348,12 +348,53 @@ var cerchio2 = function (p) {
 var profiliMozzoR = [[0,-0.2,0],cerchio1,cerchio2,[0,0.2,0]];
 var knotsMozzoR = nodi(profiliMozzoR);
 var mozzoR = NUBS(S1)(2)(knotsMozzoR)(profiliMozzoR);
-var mozzoRuota = MAP(mozzoR)(domain2);
+var mozzoRuota = COLOR([0.7,0.6,0.5,1])(MAP(mozzoR)(domain2));
 var ruotaEmozzo = STRUCT([mozzoRuota,R([1,2])([PI/2]),ruota]);
 
 var ruote = STRUCT([T([0,1,2])([0.8,1.3,-1.85]),ruotaEmozzo,T([1])([-2.6]),ruotaEmozzo]);
 
 
+//PARABREZZA
+var puntiP1 = [[1,0.65,2.2],[1,0.65,2.2],[0.7,0.3,2.5],[0.7,0,2.6],[0.7,-0.3,2.5],[1,-0.65,2.2],[1,-0.65,2.2]];
+var knotsP1 = nodi(puntiP1);
+var cP1 = NUBS(S0)(2)(knotsP1)(puntiP1);
+//var curvaP1 = MAP(cP1)(domain1);
+//DRAW(curvaP1);
+
+var puntiP2 = [[1,0.65,2.2],[1,0.65,2.2],[1,0.3,2.7],[1,0,2.9],[1,-0.3,2.7],[1,-0.65,2.2],[1,-0.65,2.2]];
+var knotsP2 = nodi(puntiP2);
+var cP2 = NUBS(S0)(2)(knotsP2)(puntiP2);
+//var curvaP2 = MAP(cP2)(domain1);
+//DRAW(curvaP2);
+
+var curveParabrezza = [cP1,cP1,cP2];
+var knotsParabrezza = nodi(curveParabrezza);
+var parabrezza = NUBS(S1)(2)(knotsParabrezza)(curveParabrezza);
+var mappaParabrezza = COLOR([1,2,3,0.5])(MAP(parabrezza)(domain2));
+
+
+//tiranti
+var puntiTirante1 = ruotaPunti (puntiElica0, 0, 1);
+var knotsT1 = nodi(puntiTirante1);
+var pT1 = NUBS(S0)(2)(knotsT1)(puntiTirante1);
+var profiloT1 = MAP(pT1)(domain1);
+DRAW(profiloT1);
+
+var puntiTirante2 = ruotaPunti (puntiElica0, 0, 4.3);
+var knotsT2 = nodi(puntiTirante2);
+var pT2 = NUBS(S0)(2)(knotsT2)(puntiTirante2);
+var profiloT2 = MAP(pT2)(domain1);
+DRAW(profiloT2);
+
+var profiliTiranteA = [[0,0.8,0],pT1,pT2,[0,4.5,0]];
+var knotsTiranteA = nodi(profiliTiranteA);
+var TiranteA = NUBS(S1)(2)(knotsTiranteA)(profiliTiranteA);
+var mappaTiranteA = MAP(TiranteA)(domain2a);
+
+var tirantiA = STRUCT([T([0,2])([2.2,1.8])(R([1,2])(-PI/11.8)(mappaTiranteA)),T([0,2])([2.2,1.8])(R([0,1])(PI)(R([1,2])(-PI/11.8)(mappaTiranteA)))]);
+
+
 //unisco in una struct e disegno
-var modello = STRUCT([ali,mappaFusoliera1,mappaFusoliera2,mappaFusoliera3,mappaFusolieraM,elicheMozzo,marmitte,ruote,T([0,2])([11.9,2.0725]),mappaVerticalS,OrizontalStabilizers]);
+var fusolieraS = STRUCT([COLOR([0,0,0.8,1]),mappaFusoliera1,mappaFusoliera2,mappaFusoliera3,mappaFusolieraM]);
+var modello = STRUCT([tirantiA,mappaParabrezza,fusolieraS,elicheMozzo,marmitte,ruote,COLOR([1,1,1,1]),ali,T([0,2])([11.9,2.0725]),mappaVerticalS,OrizontalStabilizers]);
 DRAW(modello);
