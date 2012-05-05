@@ -107,55 +107,18 @@ var c6 = NUBS(S0)(2)(knots6)(puntiC6);
 //var curva6 = MAP(c6)(domain1);
 //DRAW(curva6);
 
-var puntiC7 = [[11.9,0.1,1+1.5*0.135],[11.9,0.1,1.5],[11.9,0.095,1.55],[11.9,0.09,1.6],[11.9,0.05,1.8],[11.9,0.02,2],[11.9,0,2.1],
-        [11.9,-0.02,2],[11.9,-0.05,1.8],[11.9,-0.09,1.6],[11.9,-0.095,1.55],[11.9,-0.1,1.5],[11.9,-0.1,1+1.5*0.135],[11.9,-0.1,1+1.5*0.135],[11.9,-0.1,1+1.5*0.135],[11.9,0.1,1+1.5*0.135]];
+var puntiC7 = [[11.9,0.1,1+1.5*0.135],[11.9,0.1,1.5],[11.9,0.096,1.55],[11.9,0.093,1.6],[11.9,0.08,1.8],[11.9,0.05,2],[11.9,0,2.1],
+        [11.9,-0.05,2],[11.9,-0.08,1.8],[11.9,-0.093,1.6],[11.9,-0.096,1.55],[11.9,-0.1,1.5],[11.9,-0.1,1+1.5*0.135],[11.9,-0.1,1+1.5*0.135],[11.9,-0.1,1+1.5*0.135],[11.9,0.1,1+1.5*0.135]];
 var knots7 = nodi(puntiC7);
 var c7 = NUBS(S0)(2)(knots7)(puntiC7);
 //var curva7 = MAP(c7)(domain1);
 //DRAW(curva7);
 
-var curveFusoliera3 = [c3a,c4,c5,c6,c7];
+var curveFusoliera3 = [c3a,c4,c5,c6,c7,c7,[11.9,0,1.5]];
 var knotsFusoliera3 = nodi(curveFusoliera3);
 var fusoliera3 = NUBS(S1)(2)(knotsFusoliera3)(curveFusoliera3);
 var mappaFusoliera3 = MAP(fusoliera3)(domain2);
 DRAW(mappaFusoliera3);
-
-
-//cilindro raggio r, altezza h, n risoluzione, colore color (opzionale default grigio), trasla [x,y,z] (opzionali)
-var drawCylinder = function (r,h,n,trasla,color) {
-  var domain = DOMAIN([[0,2*PI],[0,h]])([n,1]);
-
-  if (trasla === undefined) {
-    trasla = [];
-  };
-  var x = trasla[0] || 0;
-  var y = trasla[1] || 0;
-  var z = trasla[2] || 0;
-
-  if (color === undefined) { color = [1,1,1]; };
-  if (color[0] === undefined) { color[0] = 1; };
-  if (color[1] === undefined) { color[1] = 1; };
-  if (color[2] === undefined) { color[2] = 1; };
-  var rosso  = color[0];
-  var giallo = color[1];
-  var blu    = color[2];
-
-  var cylinder = function (p) {
-    var u = p[0];
-    var w = p[1];
-
-    return [x + r * COS(u), y + r * SIN(u), z + w];
-  }
-
-  var mapped = MAP(cylinder)(domain);
-  DRAW(mapped);
-  COLOR([rosso,giallo,blu])(mapped);
-
-  return mapped;
-};
-
-//alberino su cui ruota il timone di coda
-var cilindo = drawCylinder(0.1,0.87,20,[11.9,0,1+1.5*0.135]);
 
 
 var puntiC0b = [[-1.5,0.7,0.3],[-1.5,0.7,1.6],[-1.5,0.68,1.7],[-1.5,0.66,1.8],[-1.5,0.5,1.92],[-1.5,0.3,2.03],[-1.5,0,2.13],
