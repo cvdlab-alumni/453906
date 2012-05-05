@@ -20,7 +20,7 @@ function nodi (points) { //funzione che mi calcola i nodi a partire dai punti
 };
 
 
-var domain1 = INTERVALS(1)(50);
+//var domain1 = INTERVALS(1)(50);
 var domain2 = DOMAIN([[0,1],[0,1]])([30,10]);
 
 //Timone di coda, da traslare di [11.9,0,2.0725]
