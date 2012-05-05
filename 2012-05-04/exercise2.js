@@ -1,4 +1,4 @@
-//fusoliera del "DH53 Humming Bird" (mancano il musetto e il vetro paravento)
+//fusoliera del "DH53 Humming Bird"
 
 function nodi (points) { //funzione che mi calcola i nodi a partire dai punti
   var m = points.length;
@@ -20,7 +20,7 @@ function nodi (points) { //funzione che mi calcola i nodi a partire dai punti
 };
 
 
-//var domain1 = INTERVALS(1)(50);
+var domain1 = INTERVALS(1)(50);
 var domain2 = DOMAIN([[0,1],[0,1]])([30,10]);
 
 var puntiC1 = [[1.7,0.8,0],[1.7,0.8,1.8],[1.7,0.7,2.2],[1.7,0.7,2.2],[1,0.65,2.2],[0.7,0.3,2.5],[0.7,0,2.6],
@@ -119,4 +119,69 @@ var knotsFusoliera3 = nodi(curveFusoliera3);
 var fusoliera3 = NUBS(S1)(2)(knotsFusoliera3)(curveFusoliera3);
 var mappaFusoliera3 = MAP(fusoliera3)(domain2);
 DRAW(mappaFusoliera3);
-//ci andrebbe un cilindretto a chiudere c7 e a fare da alberino per il timone di coda
+
+
+//cilindro raggio r, altezza h, n risoluzione, colore color (opzionale default grigio), trasla [x,y,z] (opzionali)
+var drawCylinder = function (r,h,n,trasla,color) {
+  var domain = DOMAIN([[0,2*PI],[0,h]])([n,1]);
+
+  if (trasla === undefined) {
+    trasla = [];
+  };
+  var x = trasla[0] || 0;
+  var y = trasla[1] || 0;
+  var z = trasla[2] || 0;
+
+  if (color === undefined) { color = [1,1,1]; };
+  if (color[0] === undefined) { color[0] = 1; };
+  if (color[1] === undefined) { color[1] = 1; };
+  if (color[2] === undefined) { color[2] = 1; };
+  var rosso  = color[0];
+  var giallo = color[1];
+  var blu    = color[2];
+
+  var cylinder = function (p) {
+    var u = p[0];
+    var w = p[1];
+
+    return [x + r * COS(u), y + r * SIN(u), z + w];
+  }
+
+  var mapped = MAP(cylinder)(domain);
+  DRAW(mapped);
+  COLOR([rosso,giallo,blu])(mapped);
+
+  return mapped;
+};
+
+//alberino su cui ruota il timone di coda
+var cilindo = drawCylinder(0.1,0.87,20,[11.9,0,1+1.5*0.135]);
+
+
+var puntiC0b = [[-1.5,0.7,0.3],[-1.5,0.7,1.6],[-1.5,0.68,1.7],[-1.5,0.66,1.8],[-1.5,0.5,1.92],[-1.5,0.3,2.03],[-1.5,0,2.13],
+        [-1.5,-0.3,2.03],[-1.5,-0.5,1.92],[-1.5,-0.66,1.8],[-1.5,-0.68,1.7],[-1.5,-0.7,1.6],[-1.5,-0.7,0.3],[-1.5,-0.65,0.2],[-1.5,0.65,0.2],[-1.5,0.7,0.3]];
+var knots0b = nodi(puntiC0b);
+var c0b = NUBS(S0)(2)(knots0b)(puntiC0b);
+//var curva0a = MAP(c0a)(domain1);
+//DRAW(curva0a);
+
+var puntiM1 = [[-1.7,0.5,0.7],[-1.7,0.5,1.5],[-1.7,0.49,1.55],[-1.7,0.48,1.6],[-1.7,0.38,1.8],[-1.7,0.25,1.9],[-1.7,0,2],
+       [-1.7,-0.25,1.9],[-1.7,-0.38,1.8],[-1.7,-0.48,1.6],[-1.7,-0.49,1.55],[-1.7,-0.5,1.5],[-1.7,-0.5,0.7],[-1.7,-0.45,0.6],[-1.7,0.45,0.6],[-1.7,0.5,0.7]];
+var knotsM1 = nodi(puntiM1);
+var cM1 = NUBS(S0)(2)(knotsM1)(puntiM1);
+//var curvaM1 = MAP(cM1)(domain1);
+//DRAW(curvaM1);
+
+var puntiM2 = [[-2.3,0.4,0.9],[-2.3,0.4,1.4],[-2.3,0.39,1.45],[-2.3,0.38,1.5],[-2.3,0.33,1.6],[-2.3,0.25,1.7],[-2.3,0,1.8],
+       [-2.3,-0.25,1.7],[-2.3,-0.33,1.6],[-2.3,-0.38,1.5],[-2.3,-0.39,1.45],[-2.3,-0.4,1.4],[-2.3,-0.4,0.9],[-2.3,-0.35,0.8],[-2.3,0.35,0.8],[-2.3,0.4,0.9]];
+var knotsM2 = nodi(puntiM2);
+var cM2 = NUBS(S0)(2)(knotsM2)(puntiM2);
+//var curvaM2 = MAP(cM2)(domain1);
+//DRAW(curvaM2);
+
+//musetto della fusoliera
+var curveFusolieraM = [c0a,c0b,cM1,cM2,[-2.3,0,1.5]];
+var knotsFusolieraM = nodi(curveFusolieraM);
+var fusolieraM = NUBS(S1)(2)(knotsFusolieraM)(curveFusolieraM);
+var mappaFusolieraM = MAP(fusolieraM)(domain2);
+DRAW(mappaFusolieraM);
