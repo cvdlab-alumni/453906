@@ -1,4 +1,4 @@
-//unisco insieme i pezzi del "DH53 Humming Bird"
+//"DH53 Humming Bird" sulla pista d'atterraggio
 
 function nodi (points) { //funzione che mi calcola i nodi a partire dai punti
   var m = points.length;
@@ -308,6 +308,52 @@ var mappaMozzo = MAP(mozzo)(domain2);
 var elicheMozzo = STRUCT([T([0,2])([-2.43,1.45]),eliche,mappaMozzo]);
 
 
+//MARMITTE
+  var quartoToro = function (p) {
+    var a = p[0] * 2 * PI;
+    var b = - p[1] * PI/2;
+    var re = 0.4;
+    var ri = 0.2;
+    var r1=(re-ri)/2;
+    var r2=re-r1;
+    return [(r2 + (r1 * COS(a))) * SIN(b),(r2 + (r1 * COS(a))) * COS(b),r1 * SIN(a)];
+  }
+var mappaToro = MAP(quartoToro)(domain2);
+var mappaToroR = S([1])([-1])(MAP(quartoToro)(domain2));
+var marmitte = STRUCT([T([0,1,2])([-1.7,0.4,1.45]),mappaToro,T([2])([-0.3]),mappaToro,T([1,2])([-0.8,0.3]),mappaToroR,T([2])([-0.3]),mappaToroR]);
+
+
+//RUOTE
+  var toro = function (p) {
+    var a = p[0] * 2 * PI;
+    var b = - p[1] * 2 * PI;
+    var re = 0.65;
+    var ri = 0.45;
+    var r1=(re-ri)/2;
+    var r2=re-r1;
+    return [(r2 + (r1 * COS(a))) * SIN(b),(r2 + (r1 * COS(a))) * COS(b),r1 * SIN(a)];
+  };
+var ruota = MAP(toro)(domain2);
+
+var cerchio1 = function (p) {
+  var u = p[0];
+  var r = 0.5;
+  return [r * SIN(u*2*PI),-0.1, r * COS(u*2*PI)];
+};
+var cerchio2 = function (p) {
+  var u = p[0];
+  var r = 0.5;
+  return [r * SIN(u*2*PI),0.1, r * COS(u*2*PI)];
+};
+var profiliMozzoR = [[0,-0.2,0],cerchio1,cerchio2,[0,0.2,0]];
+var knotsMozzoR = nodi(profiliMozzoR);
+var mozzoR = NUBS(S1)(2)(knotsMozzoR)(profiliMozzoR);
+var mozzoRuota = MAP(mozzoR)(domain2);
+var ruotaEmozzo = STRUCT([mozzoRuota,R([1,2])([PI/2]),ruota]);
+
+var ruote = STRUCT([T([0,1,2])([0.8,1.3,-1.85]),ruotaEmozzo,T([1])([-2.6]),ruotaEmozzo]);
+
+
 //unisco in una struct e disegno
-var modello = STRUCT([ali,mappaFusoliera1,mappaFusoliera2,mappaFusoliera3,mappaFusolieraM,elicheMozzo,T([0,2])([11.9,2.0725]),mappaVerticalS,OrizontalStabilizers]);
+var modello = STRUCT([ali,mappaFusoliera1,mappaFusoliera2,mappaFusoliera3,mappaFusolieraM,elicheMozzo,marmitte,ruote,T([0,2])([11.9,2.0725]),mappaVerticalS,OrizontalStabilizers]);
 DRAW(modello);
