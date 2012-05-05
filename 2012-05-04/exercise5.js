@@ -393,7 +393,7 @@ var mappaTiranteA = MAP(TiranteA)(domain2a);
 
 var tirantiA = STRUCT([T([0,2])([2.2,1.8])(R([1,2])(-PI/11.8)(mappaTiranteA)),T([0,2])([2.2,1.8])(R([0,1])(PI)(R([1,2])(-PI/11.8)(mappaTiranteA)))]);
 var tirantiB = STRUCT([T([0,2])([2.2,1.8])(R([1,2])(-PI/13)(R([0,1])(PI/11.8)(mappaTiranteA))),T([0,2])([2.2,1.8])(R([0,1])(PI)(R([1,2])(-PI/13)(R([0,1])(-PI/11.8)(mappaTiranteA))))]);
-var tirantiC = STRUCT([R([1,2])(PI/14)(T([2])([-2.2])(SIMPLEX_GRID([[-0.6,0.2],[-0.5,0.2],[2.3]]))),S([1])([-1])(R([1,2])(PI/14)(T([2])([-2.2])(SIMPLEX_GRID([[-0.6,0.2],[-0.5,0.2],[2.3]]))))]) ;
+var tirantiC = STRUCT([R([1,2])(PI/14)(T([2])([-2.2])(SIMPLEX_GRID([[-0.7,0.2],[-0.5,0.2],[2.3]]))),S([1])([-1])(R([1,2])(PI/14)(T([2])([-2.2])(SIMPLEX_GRID([[-0.7,0.2],[-0.5,0.2],[2.3]]))))]) ;
 var tuttiTiranti = STRUCT([COLOR([0,0,0.8,1]),tirantiA,tirantiB,tirantiC]);
 
 
