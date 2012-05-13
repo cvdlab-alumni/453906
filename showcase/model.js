@@ -270,5 +270,5 @@ var altoparlante = STRUCT([T([0,1,2])([5,2.19,15]),R([1,2])([PI/2]),cestello,mag
 
 
 //assemblo e disegno il diffusore acustico
-var diffusore = STRUCT([altoparlante,pannelli,piramidi]);
-DRAW(diffusore);
+var scmodel = STRUCT([altoparlante,pannelli,piramidi]);
+DRAW(scmodel);
