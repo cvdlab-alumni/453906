@@ -269,6 +269,5 @@ var sospensione = semiToroide(2.6,3.3,10,50,[0.1,0.1,0.1]);
 var altoparlante = STRUCT([T([0,1,2])([5,2.19,15]),R([1,2])([PI/2]),cestello,magnete,cono,T([2])([3.35])(S([2])([0.5])(cupolino)),T([2])([4]),sospensione]);
 
 
-//assemblo e disegno il diffusore acustico
+//assemblo il diffusore acustico
 var scmodel = STRUCT([altoparlante,pannelli,piramidi]);
-DRAW(scmodel);
