@@ -241,7 +241,187 @@ var col8 = STRUCT([T([2])([3]),mattoneE,T([2])([hmd]),mattoneE,T([2])([hmd]),mat
 
 var col9 = SIMPLEX_GRID([[-0.9,0.1,-1,0.1,-1.8,0.1],[-0.3,0.7],[-2.8,0.2]]);
 
+//funzione che genera archi di circonferenza di "gradi" radianti e ruotate di "alpha" radianti
+function arcocerchio (r,ty,tz,gradi,alpha) { 
+  var funzione = function (p) { 
+    var u = alpha + p[0] * gradi;
+
+    return [r * SIN(u) , ty , tz + r * COS(u)];
+  };
+
+  return funzione;
+};
+
+//segmento parallelo ad asse X traslato anche lungo x
+function segmentoX (tx,ty,tz,lunghezza) {
+  var funzione = function (p) {
+    var u = p[0] * lunghezza;
+
+    return [tx + u,ty,tz];
+  };
+
+  return funzione;
+};
+
+//mattone F
+var l2 = 2*0.9*SIN(PI/52);
+var segmento5 = segmento(l2,0.3,3.9);
+var segmento5b = segmento(0.2,0.3,4.5);
+
+var linea1 = [[0,0.2,4.5],[0.15,0.2,4.5],[0.2,0.25,4.5],[0.2,0.3,4.5]];
+var nodiLinea1 = nodi(linea1);
+var profiloLinea1 = NUBS(S0)(2)(nodiLinea1)(linea1);
+
+var linea2 = [[0,0.2,3.9],[l2-0.03,0.2,3.9],[l2,0.25,3.9],[l2,0.3,3.9]];
+var nodiLinea2 = nodi(linea2);
+var profiloLinea2 = NUBS(S0)(2)(nodiLinea2)(linea2);
+
+var curveMatF = [segmento5,profiloLinea2,profiloLinea1,segmento5b];
+var nodiMatF = nodi(curveMatF);
+var supMatF = NUBS(S1)(2)(nodiMatF)(curveMatF);
+var mattoneF = MAP(supMatF)(dominioMattoni);
+
+//chiave
+var col20 = SIMPLEX_GRID([[l2],[-0.3,0.7],[-3.9,0.1]]);
+
+//mattone G
+var semic8 = arcocerchio(1,0.3,3,PI/13,PI/26);
+var segmento6 = segmentoX(0.2,0.3,4.5,0.4);
+
+var linea3 = [[0.2,0.3,4.5],[0.2,0.25,4.5],[0.25,0.2,4.5],[0.55,0.2,4.5],[0.6,0.25,4.5],[0.6,0.3,4.5]];
+var nodiLinea3 = nodi(linea3);
+var profiloLinea3 = NUBS(S0)(2)(nodiLinea3)(linea3);
+
+var l3 = COS((PI/2)-(PI/26));
+var l4 = COS((PI/2)-(PI/26)-(PI/13));
+var h4 = 3+SIN((PI/2)-(PI/26)-(PI/13));
+var linea4 = [[l3,0.3,4],[l3,0.25,4],[l3+0.03,0.2,4],[l4-0.03,0.2,h4],[l4,0.25,h4],[l4,0.3,h4]];
+var nodiLinea4 = nodi(linea4);
+var profiloLinea4 = NUBS(S0)(2)(nodiLinea4)(linea4);
+
+var curveMatG = [semic8,profiloLinea4,profiloLinea3,segmento6];
+var nodiMatG = nodi(curveMatG);
+var supMatG = NUBS(S1)(2)(nodiMatG)(curveMatG);
+var mattoneG = MAP(supMatG)(dominioMattoni);
+
+//mattone H
+var semic9 = arcocerchio(1,0.3,3,PI/13,PI/13+PI/26);
+
+var linea5 = [[0.6,0.3,4.5],[0.6,0.25,4.5],[0.65,0.2,4.5],[0.75,0.2,4.5],[0.8,0.2,4.5],[0.8,0.2,4.45],[0.8,0.2,4.25],[0.8,0.25,4.2],[0.8,0.3,4.2]];
+var nodiLinea5 = nodi(linea5);
+var profiloLinea5 = NUBS(S0)(2)(nodiLinea5)(linea5);
+var linea5b = [[0.6,0.3,4.5],[0.8,0.3,4.5],[0.8,0.3,4.5],[0.8,0.3,4.2]];
+var nodiLinea5b = nodi(linea5b);
+var profiloLinea5b = NUBS(S0)(2)(nodiLinea5b)(linea5b);
+
+var l5 = COS((PI/2)-(PI/26)-(PI/13));
+var l6 = COS((PI/2)-(PI/26)-(PI/13)-(PI/13));
+var h5 = 3+SIN((PI/2)-(PI/26)-(PI/13));
+var h6 = 3+SIN((PI/2)-(PI/26)-(PI/13)-(PI/13));
+var linea6 = [[l5,0.3,h5],[l5,0.25,h5],[l5+0.03,0.2,h5],[l6-0.03,0.2,h6],[l6,0.25,h6],[l6,0.3,h6]];
+var nodiLinea6 = nodi(linea6);
+var profiloLinea6 = NUBS(S0)(2)(nodiLinea6)(linea6);
+
+var curveMatH = [semic9,profiloLinea6,profiloLinea5,profiloLinea5b];
+var nodiMatH = nodi(curveMatH);
+var supMatH = NUBS(S1)(2)(nodiMatH)(curveMatH);
+var mattoneH = MAP(supMatH)(dominioMattoni);
+
+//mattone I
+var semic10 = arcocerchio(1,0.3,3,PI/13,PI/13+PI/13+PI/26);
+
+var linea7 = [[0.8,0.3,4.2],[0.8,0.25,4.2],[0.85,0.2,4.2],[1.05,0.2,4.2],[1.1,0.2,4.2],[1.1,0.2,4.15],[1.1,0.2,3.95],[1.1,0.25,3.9],[1.1,0.3,3.9]];
+var nodiLinea7 = nodi(linea7);
+var profiloLinea7 = NUBS(S0)(2)(nodiLinea7)(linea7);
+var linea7b = [[0.8,0.3,4.2],[1.1,0.3,4.2],[1.1,0.3,4.2],[1.1,0.3,3.9]];
+var nodiLinea7b = nodi(linea7b);
+var profiloLinea7b = NUBS(S0)(2)(nodiLinea7b)(linea7b);
+
+var l7 = COS((PI/2)-(PI/26)-(PI/13)-(PI/13));
+var l8 = COS((PI/2)-(PI/26)-(PI/13)-(PI/13)-(PI/13));
+var h7 = 3+SIN((PI/2)-(PI/26)-(PI/13)-(PI/13));
+var h8 = 3+SIN((PI/2)-(PI/26)-(PI/13)-(PI/13)-(PI/13));
+var linea8 = [[l7,0.3,h7],[l7,0.25,h7],[l7+0.03,0.2,h7],[l8-0.02,0.2,h8],[l8,0.25,h8],[l8,0.3,h8]];
+var nodiLinea8 = nodi(linea8);
+var profiloLinea8 = NUBS(S0)(2)(nodiLinea8)(linea8);
+
+var curveMatI = [semic10,profiloLinea8,profiloLinea7,profiloLinea7b];
+var nodiMatI = nodi(curveMatI);
+var supMatI = NUBS(S1)(2)(nodiMatI)(curveMatI);
+var mattoneI = MAP(supMatI)(dominioMattoni);
+
+//mattone J
+var semic11 = arcocerchio(1,0.3,3,PI/13,PI/13+PI/13+PI/13+PI/26);
+
+var linea9 = [[1.1,0.3,3.9],[1.1,0.25,3.9],[1.13,0.2,3.9],[1.17,0.2,3.9],[1.2,0.2,3.9],[1.2,0.2,3.85],[1.2,0.2,3.55],[1.2,0.25,3.6],[1.2,0.3,3.6]];
+var nodiLinea9 = nodi(linea9);
+var profiloLinea9 = NUBS(S0)(2)(nodiLinea9)(linea9);
+var linea9b = [[1.1,0.3,3.9],[1.2,0.3,3.9],[1.2,0.3,3.9],[1.2,0.3,3.6]];
+var nodiLinea9b = nodi(linea9b);
+var profiloLinea9b = NUBS(S0)(2)(nodiLinea9b)(linea9b);
+
+var l9 = COS((PI/2)-(PI/26)-(PI/13)-(PI/13)-(PI/13));
+var l10 = COS((PI/2)-(PI/26)-(PI/13)-(PI/13)-(PI/13)-(PI/13));
+var h9 = 3+SIN((PI/2)-(PI/26)-(PI/13)-(PI/13)-(PI/13));
+var h10 = 3+SIN((PI/2)-(PI/26)-(PI/13)-(PI/13)-(PI/13)-(PI/13));
+var linea10 = [[l9,0.3,h9],[l9,0.25,h9],[l9+0.02,0.2,h9],[l10,0.2,h10+0.02],[l10,0.25,h10],[l10,0.3,h10]];
+var nodiLinea10 = nodi(linea10);
+var profiloLinea10 = NUBS(S0)(2)(nodiLinea10)(linea10);
+
+var curveMatJ = [semic11,profiloLinea10,profiloLinea9,profiloLinea9b];
+var nodiMatJ = nodi(curveMatJ);
+var supMatJ = NUBS(S1)(2)(nodiMatJ)(curveMatJ);
+var mattoneJ = MAP(supMatJ)(dominioMattoni);
+
+//mattone K
+var semic12 = arcocerchio(1,0.3,3,PI/13,PI/13+PI/13+PI/13+PI/13+PI/26);
+
+var linea11 = [[1.2,0.2,3.6],[1.2,0.25,3.6],[1.2,0.2,3.55],[1.2,0.2,3.35],[1.2,0.25,3.3],[1.2,0.3,3.3]];
+var nodiLinea11 = nodi(linea11);
+var profiloLinea11 = NUBS(S0)(2)(nodiLinea11)(linea11);
+var linea11b = [[1.2,0.2,3.6],[1.2,0.2,3.6],[1.2,0.3,3.3],[1.2,0.3,3.3]];
+var nodiLinea11b = nodi(linea11b);
+var profiloLinea11b = NUBS(S0)(2)(nodiLinea11b)(linea11b);
+
+var l11 = COS((PI/2)-(PI/26)-(PI/13)-(PI/13)-(PI/13)-(PI/13));
+var l12 = COS((PI/2)-(PI/26)-(PI/13)-(PI/13)-(PI/13)-(PI/13)-(PI/13));
+var h11 = 3+SIN((PI/2)-(PI/26)-(PI/13)-(PI/13)-(PI/13)-(PI/13));
+var h12 = 3+SIN((PI/2)-(PI/26)-(PI/13)-(PI/13)-(PI/13)-(PI/13)-(PI/13));
+var linea12 = [[l11,0.3,h11],[l11,0.25,h11],[l11+0.02,0.2,h11],[l12,0.2,h12+0.02],[l12,0.25,h12],[l12,0.3,h12]];
+var nodiLinea12 = nodi(linea12);
+var profiloLinea12 = NUBS(S0)(2)(nodiLinea12)(linea12);
+
+var curveMatK = [semic12,profiloLinea12,profiloLinea11,profiloLinea11b];
+var nodiMatK = nodi(curveMatK);
+var supMatK = NUBS(S1)(2)(nodiMatK)(curveMatK);
+var mattoneK = MAP(supMatK)(dominioMattoni);
+
+//mattone L
+var semic13 = arcocerchio(1,0.3,3,PI/13,PI/13+PI/13+PI/13+PI/13+PI/13+PI/26);
+
+var linea13 = [[1.2,0.2,3.3],[1.2,0.25,3.3],[1.2,0.2,3.25],[1.2,0.2,3.05],[1.2,0.25,3],[1.2,0.3,3]];
+var nodiLinea13 = nodi(linea13);
+var profiloLinea13 = NUBS(S0)(2)(nodiLinea13)(linea13);
+var linea13b = [[1.2,0.2,3.3],[1.2,0.2,3.3],[1.2,0.3,3],[1.2,0.3,3]];
+var nodiLinea13b = nodi(linea13b);
+var profiloLinea13b = NUBS(S0)(2)(nodiLinea13b)(linea13b);
+
+var l13 = COS((PI/2)-(PI/26)-(PI/13)-(PI/13)-(PI/13)-(PI/13)-(PI/13));
+var l14 = COS((PI/2)-(PI/26)-(PI/13)-(PI/13)-(PI/13)-(PI/13)-(PI/13)-(PI/13));
+var h13 = 3+SIN((PI/2)-(PI/26)-(PI/13)-(PI/13)-(PI/13)-(PI/13)-(PI/13));
+var h14 = 3+SIN((PI/2)-(PI/26)-(PI/13)-(PI/13)-(PI/13)-(PI/13)-(PI/13)-(PI/13));
+var linea14 = [[l13,0.3,h13],[l13,0.25,h13],[l13+0.02,0.2,h13],[l14,0.2,h14+0.02],[l14,0.25,h14],[l14,0.3,h14]];
+var nodiLinea14 = nodi(linea14);
+var profiloLinea14 = NUBS(S0)(2)(nodiLinea14)(linea14);
+
+var curveMatL = [semic13,profiloLinea14,profiloLinea13,profiloLinea13b];
+var nodiMatL = nodi(curveMatL);
+var supMatL = NUBS(S1)(2)(nodiMatL)(curveMatL);
+var mattoneL = MAP(supMatL)(dominioMattoni);
+
+var arcata = STRUCT([mattoneF,col20,mattoneG,mattoneH,mattoneI,mattoneJ,mattoneK,mattoneL])
+
 var colonnato = STRUCT([col1,col2,col3,T([0])([3])(col3),T([0])([3])(S([0])([-1])(col3)),col4,col5,T([0])([3])(col4),T([0])([4.2])(col6),T([0])([4.9])(col6),col7,
                         T([0])([4.2])(col8),T([0])([4.9])(col8),col9,T([0,2])([4.2,2.8])(S([2])([2/3])(mattoneE)),T([0,2])([4.9,2.8])(S([2])([2/3])(mattoneE)),
-                        T([0,2])([1.2,2.8])(S([0,2])([6/7,2/3])(mattoneE))]);
+                        T([0,2])([1.2,2.8])(S([0,2])([6/7,2/3])(mattoneE)),arcata,T([0])([3])(arcata),T([0])([3])(S([0])([-1])(arcata))]);
 DRAW(colonnato);
