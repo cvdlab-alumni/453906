@@ -91,6 +91,7 @@ function segmento (lunghezza,ty,tz) {
 
 var dominioSemic = DOMAIN([[0,1],[0,1]])([20,20]);
 
+//finestre semi-circolari
 var semic1 = semicerchio(2.1,16.4,4.5);
 var semic2 = semicerchio(1.8,16.4,4.5);
 var semic3 = semicerchio(1.8,15.9,4.5);
@@ -452,3 +453,92 @@ var colonnato = STRUCT([col1,col2,col3,T([0])([3])(col3),T([0])([3])(S([0])([-1]
                         T([0,2])([1.2,2.8])(S([0,2])([6/7,2/3])(mattoneE)),arcata,T([0])([3])(arcata),T([0])([3])(S([0])([-1])(arcata)),T([0,2])([1.1,3.9])(mattoneM),
                         T([0,2])([4.1,3.9])(mattoneM),T([0,2])([0.8,4.2])(S([0])([35/80])(mattoneM)),T([0,2])([1.85,4.2])(S([0])([35/80])(mattoneM)),T([0,2])([3.8,4.2])(S([0])([35/80])(mattoneM))]);
 DRAW(colonnato);
+
+//sezione di cilindro di raggio r, altezza h, angolo gradi (in radianti), ruotato di alpha, traslato di trasla [x,y,z] (opzionali)
+function cilindro (r,h,gradi,alpha,trasla) {
+  if (trasla === undefined) {
+    trasla = [];
+  };
+  var x = trasla[0] || 0;
+  var y = trasla[1] || 0;
+  var z = trasla[2] || 0;
+
+  var funzione = function (p) {
+    var u = alpha + p[0] * gradi;
+    var w = p[1] * h;
+
+    return [x + r * COS(u), y + r * SIN(u), z + w];
+  }
+
+  return funzione;
+};
+
+//ingresso
+var dominioCilindri = DOMAIN([[0,1],[0,1]])([20,1]);
+var cil1 = cilindro(1.4,4.5,PI/2 - PI/12,-PI/2);
+var cil2 = cilindro(1.4,4.5,PI/2 - PI/12,PI/12);
+var mappaCil1 = MAP(cil1)(dominioCilindri);
+var mappaCil2 = MAP(cil2)(dominioCilindri);
+
+//muri ingresso
+var s1 = 1.6 - COS(PI/12)*1.2;
+var s2 = 1.8 - SIN(PI/12)*1.4;
+var muro1 = SIMPLEX_GRID([[-(6.2-s1),s1],[-0.7,0.3+s2,-(3.6-s2-s2),s2],[6.2]]);
+
+var s3 = 0.4;
+var s4 = 1.6 - s1;
+var muro2 = SIMPLEX_GRID([[-(6.2-s1-s4),s4],[-1,s3,-(3.6-s3-s3),s3],[4.5]]);
+
+var muro3 = SIMPLEX_GRID([[-(6.2-s1),s1],[-(1+s2),3.6-s2-s2],[-2,4.2]]); //DA RIFARE CILINDRICO
+
+var muro4 = SIMPLEX_GRID([[-5.8,0.4],[-0.7,3.9],[-6.2,2.2]]);
+var muro5 = SIMPLEX_GRID([[-0.8,7,-0.8,1.7],[-4.6,0.6],[7.4]]);
+var muro6 = SIMPLEX_GRID([[-5.8,2,-0.8,1.7],[-4.6,0.6],[-7.4,1]]);
+var muro7 = SIMPLEX_GRID([[-7.8,0.8],[-4.6,0.6],[-2,2,-2.4,2]]);
+var muro8 = SIMPLEX_GRID([[0.8],[-4.6,0.6],[-2.5,4.9]]);
+
+var dominioSfera = DOMAIN([[0,1],[0,1]])([20,20]);
+//spicchio di sfera di "gradi" radianti, ruotato di alpha, traslato di trasla (opzionale)
+function sfera (r,gradi,alpha,trasla) {
+  if (trasla === undefined) {
+    trasla = [];
+  };
+  var tx = trasla[0] || 0;
+  var ty = trasla[1] || 0;
+  var tz = trasla[2] || 0;
+
+  var funzione = function (p) {
+    var a = p[0] * PI/2;
+    var b = alpha + p[1] * gradi;
+
+    return [tx + r * COS(a) * SIN(b),ty + r * COS(a) * COS(b),tz + r * SIN(a)];
+  }
+
+  return funzione;
+};
+
+var sfera1 = sfera(1.4,PI,0);
+var mapSfera1 = MAP(sfera1)(dominioSfera);
+
+var cil3 = cilindro(1.8,4.6,PI,PI/2);
+var mappaCil3 = MAP(cil3)(dominioCilindri);
+
+var semic14 = arcocerchio(1.4,0,4.5,PI,-PI/2);
+var semic15 = arcocerchio(1.8,0,4.5,PI,-PI/2);
+
+var curveSemic3 = [semic14,semic15,semic15];
+var nodiSemic3 = nodi(curveSemic3);
+var supSemic3 = NUBS(S1)(2)(nodiSemic3)(curveSemic3);
+var mappaSemic3 = MAP(supSemic3)(dominioSemic);
+
+var ingresso = STRUCT([T([0,1])([4.6,2.8])(S([0])([1.2/1.4])(mappaCil1)),T([0,1])([4.6,2.8])(S([0])([1.2/1.4])(mappaCil2)),muro1,muro2,muro3,muro4,muro5,muro6,muro7,muro8,
+                        T([0,1,2])([4.6,2.8,4.5])(S([0])([1.2/1.4])(mapSfera1)),T([1,2])([2.8,4.5])(R([0,2])(PI/2)(mappaCil3)),T([0,1])([4.6,2.8])(R([0,1])(PI/2)(mappaSemic3))]);
+DRAW(ingresso);
+
+//solaio
+var solaio1 = SIMPLEX_GRID([[-6.2,4.1],[-0.7,10.9],[-4,0.4]]);
+var solaio2 = SIMPLEX_GRID([[-2.8,7.5],[-11.6,4.3],[-4,0.4]]);
+
+var solaio = STRUCT([solaio1,solaio2]);
+DRAW(solaio);
+
