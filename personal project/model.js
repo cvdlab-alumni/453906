@@ -19,11 +19,9 @@ function nodi (points) {
   return knots;
 };
 
-
-
-//scalini
-var hS = 0.14;
-var lS = 0.24;
+//scalini semicircolari
+var hS = 0.14; //altezza scalini
+var lS = 0.24; //larghezza scalini
 var dominioScalini = DOMAIN([[0,1],[3*PI/2,2*PI]])([30,20]); //primo per l'altezza, secondo per circonferenza
 var puntiScalini = [[0,0,0],[1,0,0],[1,0,0],[1,0,-hS],[1,0,-hS],[1+lS,0,-hS],[1+lS,0,-hS],[1+lS,0,-2*hS],[1+lS,0,-2*hS],[1+2*lS,0,-2*hS],[1+2*lS,0,-2*hS],
                     [1+2*lS,0,-3*hS],[1+2*lS,0,-3*hS],[1+3*lS,0,-3*hS],[1+3*lS,0,-3*hS],[1+3*lS,0,-4*hS],[1+3*lS,0,-4*hS],[1+4*lS,0,-4*hS],[1+4*lS,0,-4*hS],
@@ -34,40 +32,78 @@ var mappaScalini = ROTATIONAL_SURFACE(profiloScalini);
 var scalini = MAP(mappaScalini)(dominioScalini);
 DRAW(scalini);
 
-//base
-var base = T([2])([-hS])(SIMPLEX_GRID([[11],[16.6],[hS]]));
+//scalinata posteriore
+var hS2 = 1.4/12 //altezza scalini
+var lS2 = 0.284; //larghezza scalini
+var scalinata = [];
+for (var i = 0; i < 12; i++) {
+  scalinata[i] = SIMPLEX_GRID([[2.2],[-(18+(lS2*i)),lS2],[-(hS2*(11-i)),hS2]]);
+};
+var scalino1 = SIMPLEX_GRID([[2.2],[-16.6,1.4],[-1.4,hS]]);
+
+var dominioScale = DOMAIN([[0,1],[0,1]])([20,20]);
+var bordoScale1 = [[2.4,21.8,0],[2.4,21.8,hS2+0.02],[2.4,21.8,hS2+0.02],[2.43,21.8,hS2+0.02],[2.43,21.8,hS2+0.02],[2.43,21.8,hS2+0.05],[2.43,21.8,hS2+0.05],
+                  [2.17,21.8,hS2+0.05],[2.17,21.8,hS2+0.05],[2.17,21.8,hS2+0.02],[2.17,21.8,hS2+0.02],[2.2,21.8,hS2+0.02],[2.2,21.8,hS2+0.02],[2.2,21.8,0],[2.2,21.8,0],[2.4,21.8,0]];
+var bordoScale2 = [[2.4,21.4,0],[2.4,21.4,hS2+0.02],[2.4,21.4,hS2+0.02],[2.43,21.4,hS2+0.02],[2.43,21.4,hS2+0.02],[2.43,21.4,hS2+0.05],[2.43,21.4,hS2+0.05],
+                  [2.17,21.4,hS2+0.05],[2.17,21.4,hS2+0.05],[2.17,21.4,hS2+0.02],[2.17,21.4,hS2+0.02],[2.2,21.4,hS2+0.02],[2.2,21.4,hS2+0.02],[2.2,21.4,0],[2.2,21.4,0],[2.4,21.4,0]];
+var bordoScale3 = [[2.4,18,0],[2.4,18,hS+1.4+0.02],[2.4,18,hS+1.4+0.02],[2.43,18,hS+1.4+0.02],[2.43,18,hS+1.4+0.02],[2.43,18,hS+1.4+0.05],[2.43,18,hS+1.4+0.05],
+                  [2.17,18,hS+1.4+0.05],[2.17,18,hS+1.4+0.05],[2.17,18,hS+1.4+0.02],[2.17,18,hS+1.4+0.02],[2.2,18,hS+1.4+0.02],[2.2,18,hS+1.4+0.02],[2.2,18,0],[2.2,18,0],[2.4,18,0]];
+var bordoScale4 = [[2.4,16.4,0],[2.4,16.4,hS+1.4+0.02],[2.4,16.4,hS+1.4+0.02],[2.43,16.4,hS+1.4+0.02],[2.43,16.4,hS+1.4+0.02],[2.43,16.4,hS+1.4+0.05],[2.43,16.4,hS+1.4+0.05],
+                  [2.17,16.4,hS+1.4+0.05],[2.17,16.4,hS+1.4+0.05],[2.17,16.4,hS+1.4+0.02],[2.17,16.4,hS+1.4+0.02],[2.2,16.4,hS+1.4+0.02],[2.2,16.4,hS+1.4+0.02],[2.2,16.4,0],[2.2,16.4,0],[2.4,16.4,0]];
+var nodiBordoScale1 = nodi(bordoScale1);
+var profiloBordoScale1 = NUBS(S0)(2)(nodiBordoScale1)(bordoScale1);
+var nodiBordoScale2 = nodi(bordoScale2);
+var profiloBordoScale2 = NUBS(S0)(2)(nodiBordoScale2)(bordoScale2);
+var nodiBordoScale3 = nodi(bordoScale3);
+var profiloBordoScale3 = NUBS(S0)(2)(nodiBordoScale3)(bordoScale3);
+var nodiBordoScale4 = nodi(bordoScale4);
+var profiloBordoScale4 = NUBS(S0)(2)(nodiBordoScale4)(bordoScale4);
+
+var profiliBordoScale = [[2.3,21.8,hS2+0.05],profiloBordoScale1,profiloBordoScale1,profiloBordoScale2,profiloBordoScale2,profiloBordoScale3,profiloBordoScale3,profiloBordoScale4];
+var nodiBordoScale = nodi(profiliBordoScale);
+var bordoScale = NUBS(S1)(2)(nodiBordoScale)(profiliBordoScale);
+var mappaBordoScale = MAP(bordoScale)(dominioScale);
+
+var scalini2 = STRUCT([T([2])([-(hS+1.4)]),STRUCT(scalinata),scalino1,mappaBordoScale]);
+DRAW(scalini2);
+
+//base di 22x16.6 metri
+var base = T([2])([-hS])(SIMPLEX_GRID([[11],[16.6],[hS]])); //base alta come uno scalino
 DRAW(base);
 
-//muri esterni sopra la base
-var torreA = SIMPLEX_GRID([[-5.8,2],[-0.2,0.5],[8.4]]);
-var torreB = SIMPLEX_GRID([[-7.8,1],[-0.2,0.5],[0.8,-2,2.9,-2,0.7]]);
-var torreC = SIMPLEX_GRID([[-8.8,2],[-0.2,0.5],[8.4]]);
+//muri esterni
+var torreA = SIMPLEX_GRID([[-5.8,2],[-0.2,0.5],[1.4,-hS,8.4]]);
+var torreB = SIMPLEX_GRID([[-7.8,1],[-0.2,0.5],[0.2,-1,0.2,-hS,0.8,-2,2.9,-2,0.7]]);
+var torreC = SIMPLEX_GRID([[-8.8,2],[-0.2,0.5],[1.4,-hS,8.4]]);
 var torre = STRUCT([torreA,torreB,torreC]);
 
-var latoA = SIMPLEX_GRID([[-10.3,0.5],[-0.7,1.5],[8.4]]);
-var latoB = SIMPLEX_GRID([[-10.3,0.5],[-2.2,1],[0.8,-2,2.9,-2,0.7]]);
-var latoC = SIMPLEX_GRID([[-10.3,0.5],[-3.2,2],[8.4]]);
-var latoD = SIMPLEX_GRID([[-10.3,0.5],[-5.2,0.7],[7.4]]);
-var latoE = SIMPLEX_GRID([[-10.3,0.5],[-5.9,1],[0.8,-2,2.5,-0.9,1.2]]);
-var latoF = SIMPLEX_GRID([[-10.3,0.5],[-6.9,2.8],[7.4]]);
-var latoG = SIMPLEX_GRID([[-10.3,0.5],[-9.7,1],[0.8,-2,2.5,-0.9,1.2]]);
-var latoH = SIMPLEX_GRID([[-10.3,0.5],[-10.7,2.7],[7.4]]);
-var latoI = SIMPLEX_GRID([[-10.3,0.5],[-13.4,1],[0.8,-2,2.5,-0.9,1.2]]);
-var latoJ = SIMPLEX_GRID([[-10.3,0.5],[-14.4,1.5],[7.4]]);
+var latoA = SIMPLEX_GRID([[-10.3,0.5],[-0.7,1.5],[1.4,-hS,8.4]]);
+var latoB = SIMPLEX_GRID([[-10.3,0.5],[-2.2,1],[0.2,-1,0.2,-hS,0.8,-2,2.9,-2,0.7]]);
+var latoC = SIMPLEX_GRID([[-10.3,0.5],[-3.2,2],[1.4,-hS,8.4]]);
+var latoD = SIMPLEX_GRID([[-10.3,0.5],[-5.2,0.7],[1.4,-hS,7.4]]);
+var latoE = SIMPLEX_GRID([[-10.3,0.5],[-5.9,1],[0.2,-1,0.2,-hS,0.8,-2,2.5,-0.9,1.2]]);
+var latoF = SIMPLEX_GRID([[-10.3,0.5],[-6.9,2.8],[1.4,-hS,7.4]]);
+var latoG = SIMPLEX_GRID([[-10.3,0.5],[-9.7,1],[0.2,-1,0.2,-hS,0.8,-2,2.5,-0.9,1.2]]);
+var latoH = SIMPLEX_GRID([[-10.3,0.5],[-10.7,2.7],[1.4,-hS,7.4]]);
+var latoI = SIMPLEX_GRID([[-10.3,0.5],[-13.4,1],[0.2,-1,0.2,-hS,0.8,-2,2.5,-0.9,1.2]]);
+var latoJ = SIMPLEX_GRID([[-10.3,0.5],[-14.4,1.5],[1.4,-hS,7.4]]);
 var lato = STRUCT([latoA,latoB,latoC,latoD,latoE,latoF,latoG,latoH,latoI,latoJ]);
 
-var retroA = SIMPLEX_GRID([[-8.8,2],[-15.9,0.5],[7.4]]);
-var retroB = SIMPLEX_GRID([[-7.8,1],[-15.9,0.5],[0.8,-2,2.5,-0.9,1.2]]);
-var retroC = SIMPLEX_GRID([[-5.2,2.6],[-15.9,0.5],[7.4]]);
-var retroD = SIMPLEX_GRID([[-4.2,1],[-15.9,0.5],[0.8,-2,2.5,-0.9,1.2]]);
-var retroE = SIMPLEX_GRID([[-2.1,2.1],[-15.9,0.5],[7.4]]);
-var retroF = SIMPLEX_GRID([[-2,0.1],[-15.9,0.5],[4.5]]);
-var retroG = SIMPLEX_GRID([[-1,1],[-15.9,0.5],[0.8,-2,1.7]]);
-var retroH = SIMPLEX_GRID([[-0.5,0.5],[-15.9,0.5],[4.5]]);
-var retroI = SIMPLEX_GRID([[0.5],[-15.9,0.5],[-2,2.5]]);
-var retroJ = SIMPLEX_GRID([[2.1],[-15.9,0.5],[-6.6,0.8]]);
+var retroA = SIMPLEX_GRID([[-8.8,2],[-15.9,0.5],[1.4,-hS,7.4]]);
+var retroB = SIMPLEX_GRID([[-7.8,1],[-15.9,0.5],[-1.2,0.2,-hS,0.8,-2,2.5,-0.9,1.2]]);
+var retroC = SIMPLEX_GRID([[-5.2,2.6],[-15.9,0.5],[1.4,-hS,7.4]]);
+var retroD = SIMPLEX_GRID([[-4.2,1],[-15.9,0.5],[0.2,-1,0.2,-hS,0.8,-2,2.5,-0.9,1.2]]);
+var retroE = SIMPLEX_GRID([[-2.1,2.1],[-15.9,0.5],[1.4,-hS,7.4]]);
+var retroF = SIMPLEX_GRID([[-2,0.1],[-15.9,0.5],[1.4,-hS,4.5]]);
+var retroG = SIMPLEX_GRID([[-1,1],[-15.9,0.5],[1.4,-hS,0.8,-2,1.7]]);
+var retroH = SIMPLEX_GRID([[-0.5,0.5],[-15.9,0.5],[1.4,-hS,4.5]]);
+var retroI = SIMPLEX_GRID([[0.5],[-15.9,0.5],[1.4,-hS,-2,2.5]]);
+var retroJ = SIMPLEX_GRID([[2.1],[-15.9,0.5],[1.4,-hS,-6.6,0.8]]);
 var retro = STRUCT([retroA,retroB,retroC,retroD,retroE,retroF,retroG,retroH,retroI,retroJ]);
 
+var fronte = SIMPLEX_GRID([[5.8],[-0.2,0.5],[1.4]]);
+
+//quarto di cerchio di raggio r, traslato di ty,tz
 function semicerchio (r,ty,tz) { 
   var funzione = function (p) { 
     var u = p[0] * PI/2;
@@ -114,7 +150,7 @@ var colonninaSemic = SIMPLEX_GRID([[-0.5,0.3],[-15.9,0.5],[-4.8,1.5]]);
 
 var finestreSemic = STRUCT([sogliaSemic,colonninaSemic,mappaSemic1,mappaSemic2]);
 
-var muriEsterni = STRUCT([torre,lato,retro,finestreSemic]);
+var muriEsterni = STRUCT([finestreSemic,T([2])([-(hS+1.4)]),torre,lato,retro,fronte]);
 DRAW(muriEsterni);
 
 //colonnato con arcate
@@ -475,6 +511,7 @@ function cilindro (r,h,gradi,alpha,trasla) {
 
 //ingresso
 var dominioCilindri = DOMAIN([[0,1],[0,1]])([20,1]);
+var dominioCilindri2 = DOMAIN([[0,1],[0,1]])([40,1]);
 var cil1 = cilindro(1.4,4.5,PI/2 - PI/12,-PI/2);
 var cil2 = cilindro(1.4,4.5,PI/2 - PI/12,PI/12);
 var mappaCil1 = MAP(cil1)(dominioCilindri);
@@ -497,7 +534,7 @@ var muro6 = SIMPLEX_GRID([[-5.8,2,-0.8,1.7],[-4.6,0.6],[-7.4,1]]);
 var muro7 = SIMPLEX_GRID([[-7.8,0.8],[-4.6,0.6],[-2,2,-2.4,2]]);
 var muro8 = SIMPLEX_GRID([[0.8],[-4.6,0.6],[-2.5,4.9]]);
 
-var dominioSfera = DOMAIN([[0,1],[0,1]])([20,20]);
+var dominioSfera = DOMAIN([[0,1],[0,1]])([20,40]);
 //spicchio di sfera di "gradi" radianti, ruotato di alpha, traslato di trasla (opzionale)
 function sfera (r,gradi,alpha,trasla) {
   if (trasla === undefined) {
@@ -521,7 +558,7 @@ var sfera1 = sfera(1.4,PI,0);
 var mapSfera1 = MAP(sfera1)(dominioSfera);
 
 var cil3 = cilindro(1.8,4.6,PI,PI/2);
-var mappaCil3 = MAP(cil3)(dominioCilindri);
+var mappaCil3 = MAP(cil3)(dominioCilindri2);
 
 var semic14 = arcocerchio(1.4,0,4.5,PI,-PI/2);
 var semic15 = arcocerchio(1.8,0,4.5,PI,-PI/2);
@@ -538,7 +575,112 @@ DRAW(ingresso);
 //solaio
 var solaio1 = SIMPLEX_GRID([[-6.2,4.1],[-0.7,10.9],[-4,0.4]]);
 var solaio2 = SIMPLEX_GRID([[-2.8,7.5],[-11.6,4.3],[-4,0.4]]);
+var solaio3 = SIMPLEX_GRID([[-3.6,2.2],[-8,3.2],[-4,0.4]]);
 
-var solaio = STRUCT([solaio1,solaio2]);
+var solaio = STRUCT([solaio1,solaio2,solaio3]);
 DRAW(solaio);
 
+//muri interni
+var muroI1 = SIMPLEX_GRID([[-3.6,0.4],[-6.4,2,-0.8,2],[4.5]]);
+var muroI1p = SIMPLEX_GRID([[-3.6,0.4],[-6.4,-2,0.8],[-2,2.5]]);
+var muroI2 = SIMPLEX_GRID([[-5.8,0.4],[-5.2,3.2,-0.8,2],[7.4]]);
+var muroI2p = SIMPLEX_GRID([[-5.8,0.4],[-5.2,-3.2,0.8],[-2,2.4,-2,1]]);
+var muroI3 = SIMPLEX_GRID([[-2.4,0.4],[-11.6,1.75,-0.8,1.75],[7.4]]);
+var muroI3p = SIMPLEX_GRID([[-2.4,0.4],[-11.6,-1.75,0.8],[-2,5.4]]);
+var muroI4 = SIMPLEX_GRID([[-2.4,1.8,-0.8,2.8,-0.8,1.7],[-11.2,0.4],[7.4]]);
+var muroI4p = SIMPLEX_GRID([[-2.4,-1.8,0.8,-2.8,0.8],[-11.2,0.4],[-2,2.4,-2,1]]);
+var muroI5 = SIMPLEX_GRID([[-2.4,1.6],[-5.2,1.2],[7.4]]); //pilastri
+var muroI6 = SIMPLEX_GRID([[-4,1.8],[-9.2,0.4],[4]]); //divisorio
+
+var muriInterni = STRUCT([muroI1,muroI2,muroI3,muroI4,muroI1p,muroI2p,muroI3p,muroI4p,muroI5,muroI6]);
+DRAW(muriInterni);
+
+//finestre semi-circolari interne
+var semicI1 = semicerchio(2.4,0.4,4.5);
+var semicI2 = semicerchio(1.8,0.4,4.5);
+var semicI3 = semicerchio(1.8,0,4.5);
+var semicI4 = semicerchio(2.4,0,4.5);
+var segmentoI1 = segmento(2.4,0.4,7.4);
+var segmentoI2 = segmento(2.4,0,7.4);
+
+var curveSemicI1 = [semicI1,segmentoI1,segmentoI1,segmentoI2,segmentoI2,semicI4];
+var nodiSemicI1 = nodi(curveSemicI1);
+var supSemicI1 = NUBS(S1)(2)(nodiSemicI1)(curveSemicI1);
+var mappaSemicI1 = MAP(supSemicI1)(dominioSemic);
+
+var curveSemicI2 = [semicI1,semicI2,semicI2,semicI3,semicI3,semicI4];
+var nodiSemicI2 = nodi(curveSemicI2);
+var supSemicI2 = NUBS(S1)(2)(nodiSemicI2)(curveSemicI2);
+var mappaSemicI2 = MAP(supSemicI2)(dominioSemic);
+
+var sogliaSemicI = SIMPLEX_GRID([[1.8],[0.4],[-4.5,0.3]]);
+var colonninaSemicI = SIMPLEX_GRID([[-0.5,0.3],[0.4],[-4.8,2.1]]);
+
+var finestreSemicI = STRUCT([T([0,1])([4,8.8]),R([0,1])([PI/2]),sogliaSemicI,colonninaSemicI,mappaSemicI1,mappaSemicI2,S([0])([-1]),sogliaSemicI,colonninaSemicI,mappaSemicI1,mappaSemicI2]);
+DRAW(finestreSemicI);
+
+//scalette interne
+var hS3 = 0.2; //altezza scalini
+var lS3 = 0.2; //larghezza scalini
+var scalinataI = [];
+for (var i = 0; i < 10; i++) {
+  scalinataI[i] = SIMPLEX_GRID([[-4,0.9],[-(6+(lS3*i)),lS3],[-(hS3*(9-i)),hS3]]);
+};
+var scalinataI2 = [];
+for (var i = 0; i < 10; i++) {
+  scalinataI2[i] = SIMPLEX_GRID([[-4.9,0.9],[-(6+(lS3*i)),lS3],[-(2.2+(hS3*i)),hS3]]);
+};
+
+var pianerottolo = SIMPLEX_GRID([[-4,1.8],[-5.2,0.8],[-1.8,0.4]])
+var scaleInterne = STRUCT([pianerottolo,STRUCT(scalinataI),STRUCT(scalinataI2)]);
+DRAW(scaleInterne);
+
+//volta sala centrale
+var dominioVolta = DOMAIN([[0,1],[0,1]])([20,20]);
+
+//funzione che ruota di -45 gradi e trasla lungo y di 2.4 metri
+function ruotaPunti (p) {
+  var a = -PI/4;
+  x = p[0];
+  y = p[1];
+  z = p[2];
+  x1 = x * COS(a) - y * SIN(a);
+  y1 = x * SIN(a) + y * COS(a);
+
+  return [x1,2.4+y1,z];
+};
+
+//semicerchio ruotato di 45 gradi e scalato di scala
+function semicerchioR (r,scala) {
+  var funzione = function (p) { 
+    var u = p[0] * PI/2;
+    var x = r * SIN(u);
+    var y = 0;
+    var z = r * COS(u);
+    
+    return ruotaPunti([x,y,z*scala]);
+  };
+
+  return funzione;
+};
+
+var volta1 = semicerchio(2.4,0,0);
+var raggio2 = 2.4 * Math.sqrt(2);
+var volta2 = semicerchioR(raggio2,2.4/raggio2);
+
+var curveVolta1 = [volta1,volta1,volta2];
+var nodiVolta1 = nodi(curveVolta1);
+var supVolta1 = NUBS(S1)(2)(nodiVolta1)(curveVolta1);
+var mappaVolta1 = MAP(supVolta1)(dominioVolta);
+
+var voltaCentrale = STRUCT([T([1,2])([6.4,4.5]),mappaVolta1,T([1])([4.8])(S([1])([-1])(mappaVolta1)),T([0,1])([2.4,2.4])(R([0,1])([PI/2])(mappaVolta1)),T([0,1])([2.4,2.4])(S([1])([-1])(R([0,1])([PI/2])(mappaVolta1)))]);
+
+var volta3 = cilindro(2.4,1.2,PI/2,0);
+var mappaVolta3 = MAP(volta3)(dominioCilindri);
+var volta4 = cilindro(2.4,4.7,PI/2,0);
+var mappaVolta4 = MAP(volta4)(dominioCilindri);
+var volta5 = cilindro(2.4,1.2,PI,-PI/2);
+var mappaVolta5 = MAP(volta5)(dominioCilindri2);
+
+var volta = STRUCT([voltaCentrale,T([1,2])([6.4,4.5])(R([1,2])([PI/2])(mappaVolta3)),T([1,2])([15.9,4.5])(R([1,2])([PI/2])(mappaVolta4)),T([0,1,2])([3.6,8.8,4.5])(R([0,2])([-PI/2])(mappaVolta5))]);
+DRAW(volta);
