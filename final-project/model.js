@@ -529,10 +529,10 @@ var muro2 = SIMPLEX_GRID([[-(6.2-s1-s4),s4],[-1,s3,-(3.6-s3-s3),s3],[4.5]]);
 var muro3 = SIMPLEX_GRID([[-(6.2-s1),s1],[-(1+s2),3.6-s2-s2],[-2,4.2]]); //DA RIFARE CILINDRICO
 
 var muro4 = SIMPLEX_GRID([[-5.8,0.4],[-0.7,3.9],[-6.2,2.2]]);
-var muro5 = SIMPLEX_GRID([[-0.8,7,-0.8,1.7],[-4.6,0.6],[7.4]]);
-var muro6 = SIMPLEX_GRID([[-5.8,2,-0.8,1.7],[-4.6,0.6],[-7.4,1]]);
+var muro5 = SIMPLEX_GRID([[-0.8,7,-0.8,1.7],[-4.6,0.6],[6.9]]);
+var muro6 = SIMPLEX_GRID([[-5.8,2,-0.8,1.7],[-4.6,0.6],[-6.9,1.5]]);
 var muro7 = SIMPLEX_GRID([[-7.8,0.8],[-4.6,0.6],[-2,2,-2.4,2]]);
-var muro8 = SIMPLEX_GRID([[0.8],[-4.6,0.6],[-2.5,4.9]]);
+var muro8 = SIMPLEX_GRID([[0.8],[-4.6,0.6],[-2.5,4.4]]);
 
 var dominioSfera = DOMAIN([[0,1],[0,1]])([20,40]);
 //spicchio di sfera di "gradi" radianti, ruotato di alpha, traslato di trasla (opzionale)
@@ -684,3 +684,44 @@ var mappaVolta5 = MAP(volta5)(dominioCilindri2);
 
 var volta = STRUCT([voltaCentrale,T([1,2])([6.4,4.5])(R([1,2])([PI/2])(mappaVolta3)),T([1,2])([15.9,4.5])(R([1,2])([PI/2])(mappaVolta4)),T([0,1,2])([3.6,8.8,4.5])(R([0,2])([-PI/2])(mappaVolta5))]);
 DRAW(volta);
+
+//tetti
+var dominioTetto = DOMAIN([[0,1],[0,1]])([20,20]);
+var coefAng1 = 1.2/4.5;
+
+//segmento parallelo ad asse Y traslato anche lungo y
+function segmentoY (tx,ty,tz,lunghezza) {
+  var funzione = function (p) {
+    var u = p[0] * lunghezza;
+
+    return [tx,ty + u,tz];
+  };
+
+  return funzione;
+};
+
+var segTetto1 = segmento(11.4,5,7.4);
+var segTetto2 = segmento(5.8,5,7.4);
+var segTetto3 = segmento(5.8,0.5,6.2); //punto più basso del tetto
+var segTetto4 = segmento(5,11,7.4+(6*coefAng1)); //punto più alto del tetto pari a 9 metri
+var segTetto5 = segmento(11.4,17,7.4); //fine del tetto sul retro
+var segTetto6 = segmentoY(11.4,5,7.4,12); //fine del tetto sul lato
+var puntoTetto1 = [5,11,7.4+(6*coefAng1)];
+
+var curveTetto1 = [segTetto3,segTetto3,segTetto2]; //parte frontale del tetto
+var nodiTetto1 = nodi(curveTetto1);
+var supTetto1 = NUBS(S1)(2)(nodiTetto1)(curveTetto1);
+var mappaTetto1 = MAP(supTetto1)(dominioTetto);
+
+var curveTetto2 = [segTetto1,segTetto4,segTetto4,segTetto5]; //parte centrale del tetto
+var nodiTetto2 = nodi(curveTetto2);
+var supTetto2 = NUBS(S1)(2)(nodiTetto2)(curveTetto2);
+var mappaTetto2 = MAP(supTetto2)(dominioTetto);
+
+var curveTetto3 = [segTetto6,puntoTetto1,puntoTetto1]; //parte laterale del tetto
+var nodiTetto3 = nodi(curveTetto3);
+var supTetto3 = NUBS(S1)(2)(nodiTetto3)(curveTetto3);
+var mappaTetto3 = MAP(supTetto3)(dominioTetto);
+
+var tetti = STRUCT([mappaTetto1,mappaTetto2,mappaTetto3]);
+DRAW(tetti);
