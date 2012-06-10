@@ -155,8 +155,8 @@ var muriEsterni = STRUCT([finestreSemic,T([2])([-(hS+1.4)]),torre,lato,retro,fro
 DRAW(muriEsterni);
 
 //colonnato con arcate
-var col1 = SIMPLEX_GRID([[-1,1,-2,1.8],[-0.3,0.7],[6.2]]);
-var col2 = SIMPLEX_GRID([[1,-1,2],[-0.3,0.7],[-4,2.2]]);
+var col1 = SIMPLEX_GRID([[-1,1,-2,1.8],[-0.3,0.7],[6]]);
+var col2 = SIMPLEX_GRID([[1,-1,2],[-0.3,0.7],[-4,2]]);
 
 var semic5 = semicerchio(1,0.3,3);
 var semic6 = semicerchio(1,1,3);
@@ -687,7 +687,7 @@ var volta = STRUCT([voltaCentrale,T([1,2])([6.4,4.5])(R([1,2])([PI/2])(mappaVolt
 DRAW(volta);
 
 //tetti
-var dominioTetto = DOMAIN([[0,1],[0,1]])([20,20]);
+var dominioTetto = DOMAIN([[0,1],[0,1]])([24,24]);
 var coefAng1 = 1.2/4.5;
 
 //segmento parallelo ad asse Y traslato anche lungo y
@@ -773,5 +773,72 @@ var nodiTetto7 = nodi(curveTetto7);
 var supTetto7 = NUBS(S1)(2)(nodiTetto7)(curveTetto7);
 var mappaTetto7 = MAP(supTetto7)(dominioTetto);
 
-var tetti = STRUCT([mappaTetto1,mappaTetto2,mappaTetto3,mappaTetto5,mappaTetto6,mappaTetto7]);
+var fregio9 = [[0,0.3,4.5],[0,0.2,4.5],[0,0.2,4.5],[0,0.2,5],[0,0.2,5],[0,0,5.2],[0,0,5.2],[0,-0.2,5.2],[0,-0.2,5.2],[0,-0.2,5.3],[0,-0.2,5.3],[0,-0.3,5.4],[0,-0.3,5.4],[0,0.3,5.4]];
+var fregio10 = [[5.5,0.3,4.5],[5.5,0.2,4.5],[5.5,0.2,4.5],[5.5,0.2,5],[5.5,0.2,5],[5.7,0,5.2],[5.7,0,5.2],[5.9,-0.2,5.2],[5.9,-0.2,5.2],[5.9,-0.2,5.3],[5.9,-0.2,5.3],[6,-0.3,5.4],[6,-0.3,5.4],[6,0.3,5.4]];
+var fregio11 = [[5.5,0.3,4.5],[5.5,0.3,4.5],[5.5,0.3,4.5],[5.5,0.3,5],[5.5,0.3,5],[5.7,0.3,5.2],[5.7,0.3,5.2],[5.9,0.3,5.2],[5.9,0.3,5.2],[5.9,0.3,5.3],[5.9,0.3,5.3],[6,0.3,5.4],[6,0.3,5.4],[6,0.3,5.4]];
+
+var nodiFregio9 = nodi(fregio9);
+var supFregio9 = NUBS(S0)(2)(nodiFregio9)(fregio9);
+var nodiFregio10 = nodi(fregio10);
+var supFregio10 = NUBS(S0)(2)(nodiFregio10)(fregio10);
+var nodiFregio11 = nodi(fregio11);
+var supFregio11 = NUBS(S0)(2)(nodiFregio11)(fregio11);
+
+var curveTetto8 = [supFregio9,supFregio10,supFregio10,supFregio11]; //fregio tra archi e timpano/frontone
+var nodiTetto8 = nodi(curveTetto8);
+var supTetto8 = NUBS(S1)(2)(nodiTetto8)(curveTetto8);
+var mappaTetto8 = MAP(supTetto8)(dominioTetto);
+
+var hF = 2.2;
+var fregio12 = [[0,0.3,5+hF],[0,0.2,5+hF],[0,0.2,5+hF],[0,0.1,5.2+hF],[0,0.1,5.2+hF],[0,-0.2,5.2+hF],[0,-0.2,5.2+hF],[0,-0.2,5.4+hF],[0,-0.2,5.4+hF],[0,-0.4,5.6+hF],[0,-0.4,5.6+hF],[0,0.3,5.6+hF]];
+var fregio13 = [[5.5,0.3,5],[5.5,0.2,5],[5.5,0.2,5],[5.6,0.1,5.2],[5.6,0.1,5.2],[5.9,-0.2,5.2],[5.9,-0.2,5.2],[5.9,-0.2,5.4],[5.9,-0.2,5.4],[6.1,-0.4,5.6],[6.1,-0.4,5.6],[6.1,0.3,5.6]];
+var fregio14 = [[5.5,0.3,5],[5.5,0.3,5],[5.5,0.3,5],[5.6,0.3,5.2],[5.6,0.3,5.2],[5.9,0.3,5.2],[5.9,0.3,5.2],[5.9,0.3,5.4],[5.9,0.3,5.4],[6.1,0.3,5.6],[6.1,0.3,5.6],[6.1,0.3,5.6]];
+
+var nodiFregio12 = nodi(fregio12);
+var supFregio12 = NUBS(S0)(2)(nodiFregio12)(fregio12);
+var nodiFregio13 = nodi(fregio13);
+var supFregio13 = NUBS(S0)(2)(nodiFregio13)(fregio13);
+var nodiFregio14 = nodi(fregio14);
+var supFregio14 = NUBS(S0)(2)(nodiFregio14)(fregio14);
+
+var curveTetto9 = [supFregio12,supFregio13,supFregio13,supFregio14]; //frontone
+var nodiTetto9 = nodi(curveTetto9);
+var supTetto9 = NUBS(S1)(2)(nodiTetto9)(curveTetto9);
+var mappaTetto9 = MAP(supTetto9)(dominioTetto);
+
+//timpano
+var coefAng2 = hF/6.1;
+var hT = coefAng2 * 5.1;
+var fregio15 = [[5.2,0.3,6],[5.2,0.3,6.2],[5.2,0.3,6.2],[5.2,0.1,6.2],[5.2,0.1,6.2],[5.2,0.1,6.3],[5.2,0.1,6.3],[5.2,0.4,6.3],[5.2,0.4,6.3],[5.2,0.4,6]];
+var fregio16 = [[0.1,0.3,6],[0.1,0.3,6.2+hT],[0.1,0.3,6.2+hT],[0.1,0.1,6.2+hT],[0.1,0.1,6.2+hT],[0.1,0.1,6.3+hT],[0.1,0.1,6.3+hT],[0.1,0.4,6.3+hT],[0.1,0.4,6.3+hT],[0.1,0.4,6]];
+
+var nodiFregio15 = nodi(fregio15);
+var supFregio15 = NUBS(S0)(2)(nodiFregio15)(fregio15);
+var nodiFregio16 = nodi(fregio16);
+var supFregio16 = NUBS(S0)(2)(nodiFregio16)(fregio16);
+
+var curveTetto10 = [supFregio15,supFregio16,supFregio16];
+var nodiTetto10 = nodi(curveTetto10);
+var supTetto10 = NUBS(S1)(2)(nodiTetto10)(curveTetto10);
+var mappaTetto10 = MAP(supTetto10)(dominioTetto);
+
+var mappaTetto11 = SIMPLEX_GRID([[0.1],[-0.3,0.1],[-6,0.2+hT]]);
+var mappaTetto12 = SIMPLEX_GRID([[0.1],[-0.2,0.1],[-(5.9+hT),0.3]]);
+var mappaTetto13 = SIMPLEX_GRID([[0.1],[-0.1,0.3],[-(6.2+hT),0.1]]);
+var mappaTetto14 = SIMPLEX_GRID([[-5.2,0.6],[-0.3,0.1],[-6,0.2]]);
+var mappaTetto15 = SIMPLEX_GRID([[-5.2,0.2],[-0.2,0.1],[-5.8,0.4]]);
+var mappaTetto16 = SIMPLEX_GRID([[-5.2,0.6],[-0.1,0.3],[-6.2,0.1]]);
+
+var segTetto7 = segmentoY(0,0.4,6.2+hT,7);
+var segTetto8 = segmentoY(0.1,0.4,6.2+hT,7);
+var segTetto9 = segmentoY(5.2,0.4,6.2,4.2);
+var segTetto10 = segmentoY(5.8,0.4,6.2,4.2);
+
+var curveTetto17 = [segTetto7,segTetto8,segTetto8,segTetto9,segTetto9,segTetto10]; //tetto dietro il frontone
+var nodiTetto17 = nodi(curveTetto17);
+var supTetto17 = NUBS(S1)(2)(nodiTetto17)(curveTetto17);
+var mappaTetto17 = MAP(supTetto17)(dominioTetto);
+
+var tetti = STRUCT([mappaTetto1,mappaTetto2,mappaTetto3,mappaTetto5,mappaTetto6,mappaTetto7,mappaTetto8,mappaTetto9,mappaTetto10,mappaTetto11,mappaTetto12,mappaTetto13,mappaTetto14,
+                    mappaTetto15,mappaTetto16,mappaTetto17]);
 DRAW(tetti);
