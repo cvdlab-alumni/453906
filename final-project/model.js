@@ -149,7 +149,9 @@ var mappaSemic2 = MAP(supSemic2)(dominioSemic);
 var sogliaSemic = SIMPLEX_GRID([[1.8],[-15.9,0.5],[-4.5,0.3]]);
 var colonninaSemic = SIMPLEX_GRID([[-0.5,0.3],[-15.9,0.5],[-4.8,1.5]]);
 
-var finestreSemic = STRUCT([sogliaSemic,colonninaSemic,mappaSemic1,mappaSemic2]);
+var vetroFSemic = SIMPLEX_GRID([[1.8],[-16.14,0.02],[-4.8,1.5]]);;
+
+var finestreSemic = STRUCT([vetroFSemic,sogliaSemic,colonninaSemic,mappaSemic1,mappaSemic2]);
 
 var muriEsterni = STRUCT([finestreSemic,T([2])([-(hS+1.4)]),torre,lato,retro,fronte,fronteMattone]);
 DRAW(muriEsterni);
@@ -617,7 +619,10 @@ var mappaSemicI2 = MAP(supSemicI2)(dominioSemic);
 var sogliaSemicI = SIMPLEX_GRID([[1.8],[0.4],[-4.5,0.3]]);
 var colonninaSemicI = SIMPLEX_GRID([[-0.5,0.3],[0.4],[-4.8,2.1]]);
 
-var finestreSemicI = STRUCT([T([0,1])([4,8.8]),R([0,1])([PI/2]),sogliaSemicI,colonninaSemicI,mappaSemicI1,mappaSemicI2,S([0])([-1]),sogliaSemicI,colonninaSemicI,mappaSemicI1,mappaSemicI2]);
+var vetroFSemicI = SIMPLEX_GRID([[1.8],[-0.19,0.02],[-4.8,1.8]]);;
+
+var finestreSemicI = STRUCT([T([0,1])([4,8.8]),R([0,1])([PI/2]),vetroFSemicI,sogliaSemicI,colonninaSemicI,mappaSemicI1,mappaSemicI2,
+                            S([0])([-1]),vetroFSemicI,sogliaSemicI,colonninaSemicI,mappaSemicI1,mappaSemicI2]);
 DRAW(finestreSemicI);
 
 //scalette interne
@@ -842,3 +847,100 @@ var mappaTetto17 = MAP(supTetto17)(dominioTetto);
 var tetti = STRUCT([mappaTetto1,mappaTetto2,mappaTetto3,mappaTetto5,mappaTetto6,mappaTetto7,mappaTetto8,mappaTetto9,mappaTetto10,mappaTetto11,mappaTetto12,mappaTetto13,mappaTetto14,
                     mappaTetto15,mappaTetto16,mappaTetto17]);
 DRAW(tetti);
+
+//erba
+var dominioErba = DOMAIN([[0,1],[0,1]])([20,20]);
+var hE1 = -6*hS;
+var hE2 = -hS-1.4;
+
+var puntiE1 = [[0,0.2,hE1],[4,0.2,hE1],[5,0.2,hE1],[5.5,0.2,hE2],[6,0.2,hE2],[10.8,0.2,hE2],[16,0.2,hE2]];
+var puntiE2 = [[0,-2.2,hE1],[4,-2.2,hE1],[5,-2.2,hE1],[5.5,-2.2,hE2],[6,-2.2,hE2],[10.8,-2.2,hE2],[16,-2.2,hE2]];
+var puntiE3 = [[0,-4,hE1],[4,-4,hE1],[5,-4,hE1],[5.5,-4,hE2],[6,-4,hE2],[10.8,-4,hE2],[16,-4,hE2]];
+var puntiE4 = [[0,-6,hE2],[5,-6,hE2],[6,-6,hE2],[6.5,-6,hE2],[7,-6,hE2],[10.8,-6,hE2],[16,-6,hE2]];
+var puntiE5 = [[0,-7,hE2],[6,-7,hE2],[7,-7,hE2],[7.5,-7,hE2],[8,-7,hE2],[10.8,-7,hE2],[16,-7,hE2]];
+
+var nodiE1 = nodi(puntiE1);
+var curvaE1 = NUBS(S0)(2)(nodiE1)(puntiE1);
+var nodiE2 = nodi(puntiE2);
+var curvaE2 = NUBS(S0)(2)(nodiE2)(puntiE2);
+var nodiE3 = nodi(puntiE3);
+var curvaE3 = NUBS(S0)(2)(nodiE3)(puntiE3);
+var nodiE4 = nodi(puntiE4);
+var curvaE4 = NUBS(S0)(2)(nodiE4)(puntiE4);
+var nodiE5 = nodi(puntiE5);
+var curvaE5 = NUBS(S0)(2)(nodiE5)(puntiE5);
+
+var curveErba1 = [curvaE1,curvaE2,curvaE3,curvaE4,curvaE5]; //erba davanti la facciata
+var nodiErba1 = nodi(curveErba1);
+var supErba1 = NUBS(S1)(2)(nodiErba1)(curveErba1);
+var mappaErba1 = MAP(supErba1)(dominioErba);
+
+var segmentoE1 = segmentoX(10.8,0.2,hE2,5.2);
+var segmentoE2 = segmentoX(10.8,8.2,hE2,5.2);
+var segmentoE3 = segmentoX(10.8,16.4,hE2,5.2);
+
+var curveErba2 = [segmentoE1,segmentoE2,segmentoE3]; //erba sui lati
+var nodiErba2 = nodi(curveErba2);
+var supErba2 = NUBS(S1)(2)(nodiErba2)(curveErba2);
+var mappaErba2 = MAP(supErba2)(dominioErba);
+
+var segmentoE4 = segmento(16,16.4,hE2);
+var segmentoE5 = segmento(16,20.2,hE2);
+var segmentoE6 = segmento(16,24,hE2);
+
+var curveErba3 = [segmentoE4,segmentoE5,segmentoE6]; //erba sul retro
+var nodiErba3 = nodi(curveErba3);
+var supErba3 = NUBS(S1)(2)(nodiErba3)(curveErba3);
+var mappaErba3 = MAP(supErba3)(dominioErba);
+
+var erba = STRUCT([mappaErba1,mappaErba2,mappaErba3]);
+DRAW(erba);
+
+//finestre
+var fG1 = SIMPLEX_GRID([[0.1,-0.8,0.1],[0.1],[2]]);
+var fG2 = SIMPLEX_GRID([[-0.45,0.1],[0.1],[-0.1,1.1,-0.1,0.6]]);
+var fG3 = SIMPLEX_GRID([[-0.1,0.8],[0.1],[0.1,-1.1,0.1,-0.6,0.1]]);
+var fGImposte = T([1])([-0.55])(SIMPLEX_GRID([[0.05,-0.9,0.05],[0.5],[2]]));
+var vetroFG = SIMPLEX_GRID([[-0.1,0.8],[-0.04,0.02],[-0.1,1.8]]);
+
+var fP1 = SIMPLEX_GRID([[0.1,-0.8,0.1],[0.1],[0.9]]);
+var fP2 = SIMPLEX_GRID([[-0.45,0.1],[0.1],[-0.1,0.7]]);
+var fP3 = SIMPLEX_GRID([[-0.1,0.8],[0.1],[0.1,-0.7,0.1]]);
+var fPImposte = T([1])([-0.55])(SIMPLEX_GRID([[0.05,-0.9,0.05],[0.5],[0.9]]));
+var vetroFP = SIMPLEX_GRID([[-0.1,0.8],[-0.04,0.02],[-0.1,0.7]]);
+
+var fS1 = SIMPLEX_GRID([[0.1,-0.8,0.1],[0.1],[1]]);
+var fS2 = SIMPLEX_GRID([[-0.1,0.8],[0.1],[0.1,-0.8,0.1]]);
+var vetroFS = SIMPLEX_GRID([[-0.1,0.8],[-0.04,0.02],[-0.1,0.8]]);
+
+var pF1 = SIMPLEX_GRID([[0.05,-0.65,0.1],[0.1],[2.5]]);
+var pF2 = SIMPLEX_GRID([[-0.05,0.65],[0.1],[0.1,-2.3,0.1]]);
+var pFImposte = T([1])([-0.85])(SIMPLEX_GRID([[-0.75,0.05],[0.8],[2.5]]));
+var vetroPF = SIMPLEX_GRID([[-0.05,0.65],[-0.04,0.02],[-0.1,2.3]]);
+
+var pR1 = SIMPLEX_GRID([[0.05,-0.35,0.1],[0.1],[2]]);
+var pR2 = SIMPLEX_GRID([[-0.05,0.35],[0.1],[0.1,-1.8,0.1]]);
+var pRImposte = SIMPLEX_GRID([[-0.45,0.05],[-0.15,0.5],[2]]);
+var vetroPR = SIMPLEX_GRID([[-0.05,0.35],[-0.04,0.02],[-0.1,1.8]]);
+
+var fGrande = STRUCT([fG1,fG2,fG3,fGImposte,vetroFG]);
+var fPiccola = STRUCT([fP1,fP2,fP3,fPImposte,vetroFP]); //0.9m
+var fSeminter = STRUCT([fS1,fS2,vetroFS]); //1m
+var fBianca = SIMPLEX_GRID([[1],[0.1],[1]]); // da colorare bianca come il muro
+var fPortaFronte = STRUCT([T([1])([4.85]),pF1,pF2,pFImposte,vetroPF]);
+var fPortaRetro = STRUCT([T([1])([16.1]),pR1,pR2,pRImposte,vetroPR]);
+
+var lPI = 3.6-s2-s2;
+var ImpostePortaIngresso = SIMPLEX_GRID([[-(6.2-s1-lPI/2),lPI/2],[-(1+s2),0.05,-(lPI-0.1),0.05],[2]]);
+
+var finestre = STRUCT([T([0,1,2])([7.8,0.4,0.8])(fGrande),T([0,1,2])([7.8,0.4,5.7])(fGrande),
+                      T([0,1,2])([10.6,2.2,0.8])(R([0,1])([PI/2])(fGrande)),T([0,1,2])([10.6,2.2,5.7])(R([0,1])([PI/2])(fGrande)),
+                      T([0,1,2])([10.6,5.9,0.8])(R([0,1])([PI/2])(fGrande)),T([0,1,2])([10.6,9.7,0.8])(R([0,1])([PI/2])(fGrande)),T([0,1,2])([10.6,13.4,0.8])(R([0,1])([PI/2])(fGrande)),
+                      T([0,1,2])([7.8,16.1,0.8])(S([1])([-1])(fGrande)),T([0,1,2])([4.2,16.1,0.8])(S([1])([-1])(fGrande)),T([0,1,2])([1,16.1,0.8])(S([1])([-1])(fGrande)),
+                      T([0,1,2])([7.8,16.1,5.3])(S([1])([-1])(fPiccola)),T([0,1,2])([4.2,16.1,5.3])(S([1])([-1])(fPiccola)),
+                      T([0,1,2])([10.6,5.9,5.3])(R([0,1])([PI/2])(fPiccola)),T([0,1,2])([10.6,9.7,5.3])(R([0,1])([PI/2])(fPiccola)),T([0,1,2])([10.6,13.4,5.3])(R([0,1])([PI/2])(fPiccola)),
+                      T([0,1,2])([7.8,0.4,-hS-1.2])(fSeminter),T([0,1,2])([4.2,16.1,-hS-1.2])(fSeminter),
+                      T([0,1,2])([10.6,2.2,-hS-1.2])(R([0,1])([PI/2])(fBianca)),T([0,1,2])([10.6,5.9,-hS-1.2])(R([0,1])([PI/2])(fSeminter)),
+                      T([0,1,2])([10.6,9.7,-hS-1.2])(R([0,1])([PI/2])(fSeminter)),T([0,1,2])([10.6,13.4,-hS-1.2])(R([0,1])([PI/2])(fSeminter)),
+                      fPortaFronte,fPortaRetro,ImpostePortaIngresso]);
+DRAW(finestre);
