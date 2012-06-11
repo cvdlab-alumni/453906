@@ -67,8 +67,41 @@ var mappaBordoScale = MAP(bordoScale)(dominioScale);
 var scalini2 = STRUCT([T([2])([-(hS+1.4)]),STRUCT(scalinata),scalino1,mappaBordoScale]);
 DRAW(scalini2);
 
-//base di 22x16.6 metri
-var base = T([2])([-hS])(SIMPLEX_GRID([[11],[16.6],[hS]])); //base alta come uno scalino
+//base di 22x16.6 metri con fregio
+var pavimento = T([2])([-hS])(SIMPLEX_GRID([[11],[16.6],[hS]])); //base alta come uno scalino
+
+var dominioFregioB = DOMAIN([[0,1],[0,1]])([30,30]);
+var fregioB1 = [[5.7,0.3,0], [5.7,0.3,0.15],[5.7,0.3,0.15], [5.8,0.3,0.2]];
+var fregioB2 = [[5.7,0.1,0], [5.7,0.1,0.15],[5.7,0.1,0.15], [5.8,0.2,0.2]];
+var fregioB3 = [[10.9,0.1,0], [10.9,0.1,0.15],[10.9,0.1,0.15], [10.8,0.2,0.2]];
+var fregioB4 = [[10.9,16.5,0], [10.9,16.5,0.15],[10.9,16.5,0.15], [10.8,16.4,0.2]];
+var fregioB5 = [[0.7,16.5,0], [0.7,16.5,0.15],[0.7,16.5,0.15], [0.8,16.4,0.2]];
+var fregioB6 = [[0.7,16.4,0], [0.7,16.4,0.15],[0.7,16.4,0.15], [0.8,16.4,0.2]];
+
+var nodiFregioB1 = nodi(fregioB1); //angolo1 del fregio della base
+var supFregioB1 = NUBS(S0)(2)(nodiFregioB1)(fregioB1);
+var nodiFregioB2 = nodi(fregioB2); //angolo2 del fregio della base
+var supFregioB2 = NUBS(S0)(2)(nodiFregioB2)(fregioB2);
+var nodiFregioB3 = nodi(fregioB3); //angolo3 del fregio della base
+var supFregioB3 = NUBS(S0)(2)(nodiFregioB3)(fregioB3);
+var nodiFregioB4 = nodi(fregioB4); //angolo4 del fregio della base
+var supFregioB4 = NUBS(S0)(2)(nodiFregioB4)(fregioB4);
+var nodiFregioB5 = nodi(fregioB5); //angolo5 del fregio della base
+var supFregioB5 = NUBS(S0)(2)(nodiFregioB5)(fregioB5);
+var nodiFregioB6 = nodi(fregioB6); //angolo6 del fregio della base
+var supFregioB6 = NUBS(S0)(2)(nodiFregioB6)(fregioB6);
+
+var curveFregioB = [supFregioB1,supFregioB2,supFregioB2,supFregioB3,supFregioB3,supFregioB4,supFregioB4,supFregioB5,supFregioB5,supFregioB6]; //fregio della base
+var nodiFregioB = nodi(curveFregioB);
+var supFregioB = NUBS(S1)(2)(nodiFregioB)(curveFregioB);
+var fregioB = MAP(supFregioB)(dominioFregioB);
+
+var fregioC1 = SIMPLEX_GRID([[-5.75,5.1],[-0.15,0.05],[-0.7,0.1]]);
+var fregioC2 = SIMPLEX_GRID([[-5.75,0.05],[-0.2,0.1],[-0.7,0.1]]);
+var fregioC3 = SIMPLEX_GRID([[-0.7,10.15],[-16.4,0.05],[-0.7,0.1]]);
+var fregioC4 = SIMPLEX_GRID([[-10.8,0.05],[-0.2,16.2],[-0.7,0.1]]);
+
+var base = STRUCT([pavimento,fregioB,fregioC1,fregioC2,fregioC3,fregioC4]);
 DRAW(base);
 
 //muri esterni
@@ -173,7 +206,7 @@ var col3 = MAP(supCol3)(dominioCol);
 
 var dominioMattoni = DOMAIN([[0,1],[0,1]])([20,20]);
 
-//mattone A (largo 1m e spesso 20cm)
+//mattone A (largo 1m e spesso 10cm)
 var hma = 2.6/9; //altezza mattone A
 var rettangoloA1 = [[0,0.3,0],[0,0.3,hma],[0,0.3,hma],[1,0.3,hma],[1,0.3,hma],[1,0.3,0],[1,0.3,0],[0,0.3,0]];
 var rettangoloA2 = [[0,0.25,0],[0,0.25,hma],[0,0.25,hma],[1,0.25,hma],[1,0.25,hma],[1,0.25,0],[1,0.25,0],[0,0.25,0]];
@@ -194,7 +227,7 @@ var nodiMatA = nodi(curveMatA);
 var profiloMatA = NUBS(S1)(2)(nodiMatA)(curveMatA);
 var mattoneA = MAP(profiloMatA)(dominioMattoni);
 
-//mattone B (largo 60cm e spesso 30cm)
+//mattone B (largo 60cm e spesso 16cm)
 var rettangoloB1 = [[0.2,0.3,0],[0.2,0.3,hma],[0.2,0.3,hma],[0.8,0.3,hma],[0.8,0.3,hma],[0.8,0.3,0],[0.8,0.3,0],[0.2,0.3,0]];
 var rettangoloB2 = [[0.2,0.2,0],[0.2,0.2,hma],[0.2,0.2,hma],[0.8,0.2,hma],[0.8,0.2,hma],[0.8,0.2,0],[0.8,0.2,0],[0.2,0.2,0]];
 var rettangoloB3 = [[0.23,0.16,0.03],[0.23,0.16,hma-0.03],[0.23,0.16,hma-0.03],[0.77,0.16,hma-0.03],[0.77,0.16,hma-0.03],[0.77,0.16,0.03],[0.77,0.16,0.03],[0.23,0.16,0.03]];
@@ -214,7 +247,7 @@ var nodiMatB = nodi(curveMatB);
 var profiloMatB = NUBS(S1)(2)(nodiMatB)(curveMatB);
 var mattoneB = MAP(profiloMatB)(dominioMattoni);
 
-//mattone C (largo 70cm e spesso 30cm)
+//mattone C (largo 70cm e spesso 16cm)
 var rettangoloC1 = [[0,0.3,0],[0,0.3,hma],[0,0.3,hma],[0.7,0.3,hma],[0.7,0.3,hma],[0.7,0.3,0],[0.7,0.3,0],[0,0.3,0]];
 var rettangoloC2 = [[0,0.2,0],[0,0.2,hma],[0,0.2,hma],[0.7,0.2,hma],[0.7,0.2,hma],[0.7,0.2,0],[0.7,0.2,0],[0,0.2,0]];
 var rettangoloC3 = [[0.03,0.16,0.03],[0.03,0.16,hma-0.03],[0.03,0.16,hma-0.03],[0.67,0.16,hma-0.03],[0.67,0.16,hma-0.03],[0.67,0.16,0.03],[0.67,0.16,0.03],[0.03,0.16,0.03]];
@@ -398,7 +431,7 @@ var mattoneI = MAP(supMatI)(dominioMattoni);
 //mattone J
 var semic11 = arcocerchio(1,0.3,3,PI/13,PI/13+PI/13+PI/13+PI/26);
 
-var linea9 = [[1.1,0.3,3.9],[1.1,0.25,3.9],[1.13,0.2,3.9],[1.17,0.2,3.9],[1.2,0.2,3.9],[1.2,0.2,3.85],[1.2,0.2,3.55],[1.2,0.25,3.6],[1.2,0.3,3.6]];
+var linea9 = [[1.1,0.3,3.9],[1.1,0.25,3.9],[1.13,0.2,3.9],[1.17,0.2,3.9],[1.2,0.2,3.9],[1.2,0.2,3.85],[1.2,0.2,3.65],[1.2,0.25,3.6],[1.2,0.3,3.6]];
 var nodiLinea9 = nodi(linea9);
 var profiloLinea9 = NUBS(S0)(2)(nodiLinea9)(linea9);
 var linea9b = [[1.1,0.3,3.9],[1.2,0.3,3.9],[1.2,0.3,3.9],[1.2,0.3,3.6]];
@@ -421,10 +454,10 @@ var mattoneJ = MAP(supMatJ)(dominioMattoni);
 //mattone K
 var semic12 = arcocerchio(1,0.3,3,PI/13,PI/13+PI/13+PI/13+PI/13+PI/26);
 
-var linea11 = [[1.2,0.2,3.6],[1.2,0.25,3.6],[1.2,0.2,3.55],[1.2,0.2,3.35],[1.2,0.25,3.3],[1.2,0.3,3.3]];
+var linea11 = [[1.2,0.3,3.6],[1.2,0.25,3.6],[1.2,0.2,3.55],[1.2,0.2,3.35],[1.2,0.25,3.3],[1.2,0.3,3.3]];
 var nodiLinea11 = nodi(linea11);
 var profiloLinea11 = NUBS(S0)(2)(nodiLinea11)(linea11);
-var linea11b = [[1.2,0.2,3.6],[1.2,0.2,3.6],[1.2,0.3,3.3],[1.2,0.3,3.3]];
+var linea11b = [[1.2,0.3,3.6],[1.2,0.3,3.6],[1.2,0.3,3.3],[1.2,0.3,3.3]];
 var nodiLinea11b = nodi(linea11b);
 var profiloLinea11b = NUBS(S0)(2)(nodiLinea11b)(linea11b);
 
@@ -444,10 +477,10 @@ var mattoneK = MAP(supMatK)(dominioMattoni);
 //mattone L
 var semic13 = arcocerchio(1,0.3,3,PI/13,PI/13+PI/13+PI/13+PI/13+PI/13+PI/26);
 
-var linea13 = [[1.2,0.2,3.3],[1.2,0.25,3.3],[1.2,0.2,3.25],[1.2,0.2,3.05],[1.2,0.25,3],[1.2,0.3,3]];
+var linea13 = [[1.2,0.3,3.3],[1.2,0.25,3.3],[1.2,0.2,3.25],[1.2,0.2,3.05],[1.2,0.25,3],[1.2,0.3,3]];
 var nodiLinea13 = nodi(linea13);
 var profiloLinea13 = NUBS(S0)(2)(nodiLinea13)(linea13);
-var linea13b = [[1.2,0.2,3.3],[1.2,0.2,3.3],[1.2,0.3,3],[1.2,0.3,3]];
+var linea13b = [[1.2,0.3,3.3],[1.2,0.3,3.3],[1.2,0.3,3],[1.2,0.3,3]];
 var nodiLinea13b = nodi(linea13b);
 var profiloLinea13b = NUBS(S0)(2)(nodiLinea13b)(linea13b);
 
@@ -466,7 +499,7 @@ var mattoneL = MAP(supMatL)(dominioMattoni);
 
 var arcata = STRUCT([mattoneF,col20,mattoneG,mattoneH,mattoneI,mattoneJ,mattoneK,mattoneL])
 
-//mattone M (largo 80cm, spesso 20cm, alto 30cm)
+//mattone M (largo 80cm, spesso 10cm, alto 30cm)
 var hmd = 0.3;
 var rettangoloM1 = [[0,0.3,0],[0,0.3,hmd],[0,0.3,hmd],[0.8,0.3,hmd],[0.8,0.3,hmd],[0.8,0.3,0],[0.8,0.3,0],[0,0.3,0]];
 var rettangoloM2 = [[0,0.25,0],[0,0.25,hmd],[0,0.25,hmd],[0.8,0.25,hmd],[0.8,0.25,hmd],[0.8,0.25,0],[0.8,0.25,0],[0,0.25,0]];
@@ -487,10 +520,61 @@ var nodiMatM = nodi(curveMatM);
 var profiloMatM = NUBS(S1)(2)(nodiMatM)(curveMatM);
 var mattoneM = MAP(profiloMatM)(dominioMattoni);
 
+//capitelli
+var dominioCapitelli = DOMAIN([[0,1],[0,1]])([50,50]);
+
+var puntiC1 = [[1.35,0.3,4.2], [1.25,0.3,4.2],[1.25,0.3,4.2], [1.25,0.3,4.25],[1.25,0.3,4.25], [1.3,0.3,4.25],[1.3,0.3,4.25], [1.3,0.3,4.3],[1.3,0.3,4.3],
+              [1.25,0.3,4.35],[1.25,0.3,4.35], [1.21,0.3,4.36], [1.2,0.3,4.4],[1.2,0.3,4.4], [1.2,0.3,4.45],[1.2,0.3,4.45], [1.15,0.3,4.5],[1.15,0.3,4.5], [1.35,0.3,4.5]];
+var puntiC2 = [[1.35,0.3,4.2], [1.25,0.2,4.2],[1.25,0.2,4.2], [1.25,0.2,4.25],[1.25,0.2,4.25], [1.3,0.25,4.25],[1.3,0.25,4.25], [1.3,0.25,4.3],[1.3,0.25,4.3],
+              [1.25,0.2,4.35],[1.25,0.2,4.35], [1.21,0.16,4.36], [1.2,0.15,4.4],[1.2,0.15,4.4], [1.2,0.15,4.45],[1.2,0.15,4.45], [1.15,0.1,4.5],[1.15,0.1,4.5], [1.35,0.3,4.5]];
+var puntiC3 = [[1.65,0.3,4.2], [1.75,0.2,4.2],[1.75,0.2,4.2], [1.75,0.2,4.25],[1.75,0.2,4.25], [1.7,0.25,4.25],[1.7,0.25,4.25], [1.7,0.25,4.3],[1.7,0.25,4.3],
+              [1.75,0.2,4.35],[1.75,0.2,4.35], [1.79,0.16,4.36], [1.8,0.15,4.4],[1.8,0.15,4.4], [1.8,0.15,4.45],[1.8,0.15,4.45], [1.85,0.1,4.5],[1.85,0.1,4.5], [1.65,0.3,4.5]];
+var puntiC4 = [[1.65,0.3,4.2], [1.75,0.3,4.2],[1.75,0.3,4.2], [1.75,0.3,4.25],[1.75,0.3,4.25], [1.7,0.3,4.25],[1.7,0.3,4.25], [1.7,0.3,4.3],[1.7,0.3,4.3],
+              [1.75,0.3,4.35],[1.75,0.3,4.35], [1.79,0.3,4.36], [1.8,0.3,4.4],[1.8,0.3,4.4], [1.8,0.3,4.45],[1.8,0.3,4.45], [1.85,0.3,4.5],[1.85,0.3,4.5], [1.65,0.3,4.5]];
+
+var nodiC1 = nodi(puntiC1);
+var supC1 = NUBS(S0)(2)(nodiC1)(puntiC1);
+var nodiC2 = nodi(puntiC2);
+var supC2 = NUBS(S0)(2)(nodiC2)(puntiC2);
+var nodiC3 = nodi(puntiC3);
+var supC3 = NUBS(S0)(2)(nodiC3)(puntiC3);
+var nodiC4 = nodi(puntiC4);
+var supC4 = NUBS(S0)(2)(nodiC4)(puntiC4);
+
+var curveC1 = [supC1,supC2,supC2,supC3,supC3,supC4]; //capitello in alto
+var nodiC1 = nodi(curveC1);
+var supCapitello1 = NUBS(S1)(2)(nodiC1)(curveC1);
+var mapCapitello1 = MAP(supCapitello1)(dominioCapitelli);
+
+var puntiC5 = [[1.35,0.3,0], [1.15,0.3,0],[1.15,0.3,0], [1.15,0.3,0.05],[1.15,0.3,0.05], [1.16,0.3,0.09], [1.2,0.3,0.1],[1.2,0.3,0.1], [1.25,0.3,0.1],[1.25,0.3,0.1],
+              [1.3,0.3,0.125], [1.25,0.3,0.15],[1.25,0.3,0.15], [1.25,0.3,0.2],[1.25,0.3,0.2], [1.35,0.3,0.2]];
+var puntiC6 = [[1.35,0.3,0], [1.15,0.1,0],[1.15,0.1,0], [1.15,0.1,0.05],[1.15,0.1,0.05], [1.16,0.11,0.09], [1.2,0.15,0.1],[1.2,0.15,0.1], [1.25,0.2,0.1],[1.25,0.2,0.1],
+              [1.3,0.25,0.125], [1.25,0.2,0.15],[1.25,0.2,0.15], [1.25,0.2,0.2],[1.25,0.2,0.2], [1.35,0.3,0.2]];
+var puntiC7 = [[1.65,0.3,0], [1.85,0.1,0],[1.85,0.1,0], [1.85,0.1,0.05],[1.85,0.1,0.05], [1.84,0.11,0.09], [1.8,0.15,0.1],[1.8,0.15,0.1], [1.75,0.2,0.1],[1.75,0.2,0.1],
+              [1.7,0.25,0.125], [1.75,0.2,0.15],[1.75,0.2,0.15], [1.75,0.2,0.2],[1.75,0.2,0.2], [1.65,0.3,0.2]];
+var puntiC8 = [[1.65,0.3,0], [1.85,0.3,0],[1.85,0.3,0], [1.85,0.3,0.05],[1.85,0.3,0.05], [1.84,0.3,0.09], [1.8,0.3,0.1],[1.8,0.3,0.1], [1.75,0.3,0.1],[1.75,0.3,0.1],
+              [1.7,0.3,0.125], [1.75,0.3,0.15],[1.75,0.3,0.15], [1.75,0.3,0.2],[1.75,0.3,0.2], [1.65,0.3,0.2]];
+
+var nodiC5 = nodi(puntiC5);
+var supC5 = NUBS(S0)(2)(nodiC5)(puntiC5);
+var nodiC6 = nodi(puntiC6);
+var supC6 = NUBS(S0)(2)(nodiC6)(puntiC6);
+var nodiC7 = nodi(puntiC7);
+var supC7 = NUBS(S0)(2)(nodiC7)(puntiC7);
+var nodiC8 = nodi(puntiC8);
+var supC8 = NUBS(S0)(2)(nodiC8)(puntiC8);
+
+var curveC2 = [supC5,supC6,supC6,supC7,supC7,supC8]; //capitello in basso
+var nodiC2 = nodi(curveC2);
+var supCapitello2 = NUBS(S1)(2)(nodiC2)(curveC2);
+var mapCapitello2 = MAP(supCapitello2)(dominioCapitelli);
+
 var colonnato = STRUCT([col1,col2,col3,T([0])([3])(col3),T([0])([3])(S([0])([-1])(col3)),col4,col5,T([0])([3])(col4),T([0])([4.2])(col6),T([0])([4.9])(col6),col7,
                         T([0])([4.2])(col8),T([0])([4.9])(col8),col9,T([0,2])([4.2,2.8])(S([2])([2/3])(mattoneE)),T([0,2])([4.9,2.8])(S([2])([2/3])(mattoneE)),
                         T([0,2])([1.2,2.8])(S([0,2])([6/7,2/3])(mattoneE)),arcata,T([0])([3])(arcata),T([0])([3])(S([0])([-1])(arcata)),T([0,2])([1.1,3.9])(mattoneM),
-                        T([0,2])([4.1,3.9])(mattoneM),T([0,2])([0.8,4.2])(S([0])([35/80])(mattoneM)),T([0,2])([1.85,4.2])(S([0])([35/80])(mattoneM)),T([0,2])([3.8,4.2])(S([0])([35/80])(mattoneM))]);
+                        T([0,2])([4.1,3.9])(mattoneM),T([0,2])([0.8,4.2])(S([0])([35/80])(mattoneM)),T([0,2])([1.85,4.2])(S([0])([35/80])(mattoneM)),
+                        T([0,2])([3.8,4.2])(S([0])([35/80])(mattoneM)),
+                        mapCapitello1,T([0])([3.05])(mapCapitello1),T([0])([3.75])(mapCapitello1),mapCapitello2,T([0])([3.05])(mapCapitello2),T([0])([3.75])(mapCapitello2)]);
 DRAW(colonnato);
 
 //sezione di cilindro di raggio r, altezza h, angolo gradi (in radianti), ruotato di alpha, traslato di trasla [x,y,z] (opzionali)
@@ -572,7 +656,7 @@ var supSemic3 = NUBS(S1)(2)(nodiSemic3)(curveSemic3);
 var mappaSemic3 = MAP(supSemic3)(dominioSemic);
 
 var ingresso = STRUCT([T([0,1])([4.6,2.8])(S([0])([1.2/1.4])(mappaCil1)),T([0,1])([4.6,2.8])(S([0])([1.2/1.4])(mappaCil2)),muro1,muro2,muro3,muro4,muro5,muro6,muro7,muro8,
-                        T([0,1,2])([4.6,2.8,4.5])(S([0])([1.2/1.4])(mapSfera1)),T([1,2])([2.8,4.5])(R([0,2])(PI/2)(mappaCil3)),T([0,1])([4.6,2.8])(R([0,1])(PI/2)(mappaSemic3))]);
+                      T([0,1,2])([4.6,2.8,4.5])(S([0])([1.2/1.4])(mapSfera1)),T([1,2])([2.8,4.5])(R([0,2])(PI/2)(mappaCil3)),T([0,1])([4.6,2.8])(R([0,1])(PI/2)(mappaSemic3))]);
 DRAW(ingresso);
 
 //solaio
@@ -932,6 +1016,7 @@ var fPortaRetro = STRUCT([T([1])([16.1]),pR1,pR2,pRImposte,vetroPR]);
 
 var lPI = 3.6-s2-s2;
 var ImpostePortaIngresso = SIMPLEX_GRID([[-(6.2-s1-lPI/2),lPI/2],[-(1+s2),0.05,-(lPI-0.1),0.05],[2]]);
+var ImpostePortaSeminterrato = T([0,1,2])([7.8,15.4,-hS-1.4])(SIMPLEX_GRID([[0.05,-0.9,0.05],[0.5],[1.2]]));
 
 var finestre = STRUCT([T([0,1,2])([7.8,0.4,0.8])(fGrande),T([0,1,2])([7.8,0.4,5.7])(fGrande),
                       T([0,1,2])([10.6,2.2,0.8])(R([0,1])([PI/2])(fGrande)),T([0,1,2])([10.6,2.2,5.7])(R([0,1])([PI/2])(fGrande)),
@@ -942,5 +1027,5 @@ var finestre = STRUCT([T([0,1,2])([7.8,0.4,0.8])(fGrande),T([0,1,2])([7.8,0.4,5.
                       T([0,1,2])([7.8,0.4,-hS-1.2])(fSeminter),T([0,1,2])([4.2,16.1,-hS-1.2])(fSeminter),
                       T([0,1,2])([10.6,2.2,-hS-1.2])(R([0,1])([PI/2])(fBianca)),T([0,1,2])([10.6,5.9,-hS-1.2])(R([0,1])([PI/2])(fSeminter)),
                       T([0,1,2])([10.6,9.7,-hS-1.2])(R([0,1])([PI/2])(fSeminter)),T([0,1,2])([10.6,13.4,-hS-1.2])(R([0,1])([PI/2])(fSeminter)),
-                      fPortaFronte,fPortaRetro,ImpostePortaIngresso]);
+                      fPortaFronte,fPortaRetro,ImpostePortaIngresso,ImpostePortaSeminterrato]);
 DRAW(finestre);
