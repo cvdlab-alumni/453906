@@ -1,3 +1,12 @@
+//COLORI
+var cLegno = [0.3,0.2,0.1];
+var cVetro = [0,0.8,1,0.3];
+var cIntonaco = [0.99,0.99,0.99];
+var cTegola = [0.6,0.05,0];
+var cMattone = [1,0.95,0.8];
+var cErba = [0.2,0.4,0.05];
+var cPietra = [0.7,0.7,0.72];
+
 //funzione per il calcolo dei nodi a partire da un array di punti
 function nodi (points) {
   var m = points.length;
@@ -29,8 +38,7 @@ var puntiScalini = [[0,0,0],[1,0,0],[1,0,0],[1,0,-hS],[1,0,-hS],[1+lS,0,-hS],[1+
 var nodiScalini = nodi(puntiScalini);
 var profiloScalini = NUBS(S0)(2)(nodiScalini)(puntiScalini);
 var mappaScalini = ROTATIONAL_SURFACE(profiloScalini);
-var scalini = MAP(mappaScalini)(dominioScalini);
-DRAW(scalini);
+var scalini = COLOR(cPietra)(MAP(mappaScalini)(dominioScalini));
 
 //scalinata posteriore
 var hS2 = 1.4/12 //altezza scalini
@@ -64,8 +72,8 @@ var nodiBordoScale = nodi(profiliBordoScale);
 var bordoScale = NUBS(S1)(2)(nodiBordoScale)(profiliBordoScale);
 var mappaBordoScale = MAP(bordoScale)(dominioScale);
 
-var scalini2 = STRUCT([T([2])([-(hS+1.4)]),STRUCT(scalinata),scalino1,mappaBordoScale]);
-DRAW(scalini2);
+var scalinate = STRUCT([scalini,COLOR(cIntonaco),T([2])([-(hS+1.4)]),STRUCT(scalinata),scalino1,mappaBordoScale]);
+
 
 //base di 22x16.6 metri con fregio
 var pavimento = T([2])([-hS])(SIMPLEX_GRID([[11],[16.6],[hS]])); //base alta come uno scalino
@@ -101,8 +109,8 @@ var fregioC2 = SIMPLEX_GRID([[-5.75,0.05],[-0.2,0.1],[-0.7,0.1]]);
 var fregioC3 = SIMPLEX_GRID([[-0.7,10.15],[-16.4,0.05],[-0.7,0.1]]);
 var fregioC4 = SIMPLEX_GRID([[-10.8,0.05],[-0.2,16.2],[-0.7,0.1]]);
 
-var base = STRUCT([pavimento,fregioB,fregioC1,fregioC2,fregioC3,fregioC4]);
-DRAW(base);
+var base = STRUCT([COLOR(cPietra),pavimento,fregioB,fregioC1,fregioC2,fregioC3,fregioC4]);
+
 
 //muri esterni
 var torreA = SIMPLEX_GRID([[-5.8,2],[-0.2,0.5],[1.4,-hS,8.4]]);
@@ -135,7 +143,7 @@ var retroJ = SIMPLEX_GRID([[2.1],[-15.9,0.5],[1.4,-hS,-6.6,0.8]]);
 var retro = STRUCT([retroA,retroB,retroC,retroD,retroE,retroF,retroG,retroH,retroI,retroJ]);
 
 var fronte = SIMPLEX_GRID([[5.8],[-0.2,0.5],[1.4]]);
-var fronteMattone = SIMPLEX_GRID([[5.8],[0.2],[1.4]]); //da colorare color mattone
+var fronteMattone = COLOR(cMattone)(SIMPLEX_GRID([[5.8],[0.2],[1.4]])); //da colorare color mattone
 
 //quarto di cerchio di raggio r, traslato di ty,tz
 function semicerchio (r,ty,tz) { 
@@ -172,7 +180,7 @@ var segmento2 = segmento(2.1,15.9,6.6);
 var curveSemic1 = [semic1,segmento1,segmento1,segmento2,segmento2,semic4];
 var nodiSemic1 = nodi(curveSemic1);
 var supSemic1 = NUBS(S1)(2)(nodiSemic1)(curveSemic1);
-var mappaSemic1 = MAP(supSemic1)(dominioSemic);
+var mappaSemic1 = COLOR(cIntonaco)(MAP(supSemic1)(dominioSemic));
 
 var curveSemic2 = [semic1,semic2,semic2,semic3,semic3,semic4];
 var nodiSemic2 = nodi(curveSemic2);
@@ -182,16 +190,16 @@ var mappaSemic2 = MAP(supSemic2)(dominioSemic);
 var sogliaSemic = SIMPLEX_GRID([[1.8],[-15.9,0.5],[-4.5,0.3]]);
 var colonninaSemic = SIMPLEX_GRID([[-0.5,0.3],[-15.9,0.5],[-4.8,1.5]]);
 
-var vetroFSemic = SIMPLEX_GRID([[1.8],[-16.14,0.02],[-4.8,1.5]]);;
+var vetroFSemic = COLOR(cVetro)(SIMPLEX_GRID([[1.8],[-16.14,0.02],[-4.8,1.5]]));
 
-var finestreSemic = STRUCT([vetroFSemic,sogliaSemic,colonninaSemic,mappaSemic1,mappaSemic2]);
+var finestreSemic = STRUCT([mappaSemic1,vetroFSemic,COLOR(cMattone),sogliaSemic,colonninaSemic,mappaSemic2]);
 
-var muriEsterni = STRUCT([finestreSemic,T([2])([-(hS+1.4)]),torre,lato,retro,fronte,fronteMattone]);
-DRAW(muriEsterni);
+var muriEsterni = STRUCT([finestreSemic,T([2])([-(hS+1.4)]),fronteMattone,COLOR(cIntonaco),torre,lato,retro,fronte]);
+
 
 //colonnato con arcate
-var col1 = SIMPLEX_GRID([[-1,1,-2,1.8],[-0.3,0.7],[6]]);
-var col2 = SIMPLEX_GRID([[1,-1,2],[-0.3,0.7],[-4,2]]);
+var col1 = COLOR(cIntonaco)(SIMPLEX_GRID([[-1,1,-2,1.8],[-0.3,0.7],[6]])); //colonne e muro prima della torre
+var col2 = COLOR(cIntonaco)(SIMPLEX_GRID([[1,-1,2],[-0.3,0.7],[-4,2]])); //architrave colonne
 
 var semic5 = semicerchio(1,0.3,3);
 var semic6 = semicerchio(1,1,3);
@@ -199,12 +207,13 @@ var segmento3 = segmento(1,0.3,4);
 var segmento4 = segmento(1,1,4);
 
 var dominioCol = DOMAIN([[0,1],[0,1]])([20,20]);
-var curveCol3 = [segmento3,semic5,semic5,semic6,semic6,segmento4];
+
+var curveCol3 = [segmento3,semic5,semic5,semic6,semic6,segmento4]; //archi colonne
 var nodiCol3 = nodi(curveCol3);
 var supCol3 = NUBS(S1)(2)(nodiCol3)(curveCol3);
-var col3 = MAP(supCol3)(dominioCol);
+var col3 = COLOR(cIntonaco)(MAP(supCol3)(dominioCol));
 
-var dominioMattoni = DOMAIN([[0,1],[0,1]])([20,20]);
+var dominioMattoni = DOMAIN([[0,1],[0,1]])([20,20]); //non mi ero reso conto ci fossero così tanti mattoni di dimensioni diverse, sarebbe stato meglio realizzarli in modo più "furbo" (meno righe di codice e meno tempo perso a scrivere punti)
 
 //mattone A (largo 1m e spesso 10cm)
 var hma = 2.6/9; //altezza mattone A
@@ -317,7 +326,7 @@ var col6 = STRUCT([T([2])([0.2]),mattoneC,T([2])([hma]),mattoneC,T([2])([hma]),m
 var col7 = STRUCT([T([0,2])([1,3]),mattoneD,T([2])([hmd]),mattoneD,T([2])([hmd]),mattoneD,T([2])([hmd]),mattoneD]);
 var col8 = STRUCT([T([2])([3]),mattoneE,T([2])([hmd]),mattoneE,T([2])([hmd]),mattoneE,T([2])([hmd]),mattoneE]);
 
-var col9 = SIMPLEX_GRID([[-0.9,0.1,-1,0.1,-1.8,0.1],[-0.3,0.7],[-2.8,0.2]]);
+var col9 = COLOR(cIntonaco)(SIMPLEX_GRID([[-0.9,0.1,-1,0.1,-1.8,0.1],[-0.3,0.7],[0.2,-2.6,0.2]])); //sporgenze colonne
 
 //funzione che genera archi di circonferenza di "gradi" radianti e ruotate di "alpha" radianti
 function arcocerchio (r,ty,tz,gradi,alpha) { 
@@ -360,7 +369,7 @@ var supMatF = NUBS(S1)(2)(nodiMatF)(curveMatF);
 var mattoneF = MAP(supMatF)(dominioMattoni);
 
 //chiave
-var col20 = SIMPLEX_GRID([[l2],[-0.3,0.7],[-3.9,0.1]]);
+var col20 = COLOR(cIntonaco)(SIMPLEX_GRID([[l2],[-0.3,0.7],[-3.9,0.1]]));
 
 //mattone G
 var semic8 = arcocerchio(1,0.3,3,PI/13,PI/26);
@@ -497,7 +506,7 @@ var nodiMatL = nodi(curveMatL);
 var supMatL = NUBS(S1)(2)(nodiMatL)(curveMatL);
 var mattoneL = MAP(supMatL)(dominioMattoni);
 
-var arcata = STRUCT([mattoneF,col20,mattoneG,mattoneH,mattoneI,mattoneJ,mattoneK,mattoneL])
+var arcata = STRUCT([col20,COLOR(cMattone),mattoneF,mattoneG,mattoneH,mattoneI,mattoneJ,mattoneK,mattoneL])
 
 //mattone M (largo 80cm, spesso 10cm, alto 30cm)
 var hmd = 0.3;
@@ -569,13 +578,13 @@ var nodiC2 = nodi(curveC2);
 var supCapitello2 = NUBS(S1)(2)(nodiC2)(curveC2);
 var mapCapitello2 = MAP(supCapitello2)(dominioCapitelli);
 
-var colonnato = STRUCT([col1,col2,col3,T([0])([3])(col3),T([0])([3])(S([0])([-1])(col3)),col4,col5,T([0])([3])(col4),T([0])([4.2])(col6),T([0])([4.9])(col6),col7,
-                        T([0])([4.2])(col8),T([0])([4.9])(col8),col9,T([0,2])([4.2,2.8])(S([2])([2/3])(mattoneE)),T([0,2])([4.9,2.8])(S([2])([2/3])(mattoneE)),
-                        T([0,2])([1.2,2.8])(S([0,2])([6/7,2/3])(mattoneE)),arcata,T([0])([3])(arcata),T([0])([3])(S([0])([-1])(arcata)),T([0,2])([1.1,3.9])(mattoneM),
-                        T([0,2])([4.1,3.9])(mattoneM),T([0,2])([0.8,4.2])(S([0])([35/80])(mattoneM)),T([0,2])([1.85,4.2])(S([0])([35/80])(mattoneM)),
+var colonnato = STRUCT([col1,col2,col3,T([0])([3])(col3),T([0])([3])(S([0])([-1])(col3)),col9,arcata,T([0])([3])(arcata),T([0])([3])(S([0])([-1])(arcata)), COLOR(cMattone),
+                        col4,col5,T([0])([3])(col4),T([0])([4.2])(col6),T([0])([4.9])(col6),col7,T([0])([4.2])(col8),T([0])([4.9])(col8),
+                        T([0,2])([4.2,2.8])(S([2])([2/3])(mattoneE)),T([0,2])([4.9,2.8])(S([2])([2/3])(mattoneE)),T([0,2])([1.2,2.8])(S([0,2])([6/7,2/3])(mattoneE)),
+                        T([0,2])([1.1,3.9])(mattoneM),T([0,2])([4.1,3.9])(mattoneM),T([0,2])([0.8,4.2])(S([0])([35/80])(mattoneM)),T([0,2])([1.85,4.2])(S([0])([35/80])(mattoneM)),
                         T([0,2])([3.8,4.2])(S([0])([35/80])(mattoneM)),
                         mapCapitello1,T([0])([3.05])(mapCapitello1),T([0])([3.75])(mapCapitello1),mapCapitello2,T([0])([3.05])(mapCapitello2),T([0])([3.75])(mapCapitello2)]);
-DRAW(colonnato);
+
 
 //sezione di cilindro di raggio r, altezza h, angolo gradi (in radianti), ruotato di alpha, traslato di trasla [x,y,z] (opzionali)
 function cilindro (r,h,gradi,alpha,trasla) {
@@ -613,7 +622,7 @@ var s3 = 0.4;
 var s4 = 1.6 - s1;
 var muro2 = SIMPLEX_GRID([[-(6.2-s1-s4),s4],[-1,s3,-(3.6-s3-s3),s3],[4.5]]);
 
-var muro3 = SIMPLEX_GRID([[-(6.2-s1),s1],[-(1+s2),3.6-s2-s2],[-2,4.2]]); //DA RIFARE CILINDRICO
+var muro3 = SIMPLEX_GRID([[-(6.2-s1),s1],[-(1+s2),3.6-s2-s2],[-2,4.2]]); //DA RIFARE CILINDRICO?
 
 var muro4 = SIMPLEX_GRID([[-5.8,0.4],[-0.7,3.9],[-6.2,2.2]]);
 var muro5 = SIMPLEX_GRID([[-0.8,7,-0.8,1.7],[-4.6,0.6],[6.9]]);
@@ -655,17 +664,53 @@ var nodiSemic3 = nodi(curveSemic3);
 var supSemic3 = NUBS(S1)(2)(nodiSemic3)(curveSemic3);
 var mappaSemic3 = MAP(supSemic3)(dominioSemic);
 
-var ingresso = STRUCT([T([0,1])([4.6,2.8])(S([0])([1.2/1.4])(mappaCil1)),T([0,1])([4.6,2.8])(S([0])([1.2/1.4])(mappaCil2)),muro1,muro2,muro3,muro4,muro5,muro6,muro7,muro8,
+//cerchio di raggio r, traslato di tz
+function cerchio (r,tz) { 
+  var funzione = function (p) { 
+    var u = p[0] * 2 * PI;
+
+    return [r * SIN(u),r * COS(u),tz];
+  };
+
+  return funzione;
+};
+
+//balaustra
+var dominioBalaustra = DOMAIN([[0,1],[0,1]])([30,30]);
+var bal1 = cerchio(0.06,0.2);
+var bal2 = cerchio(0.02,0.25);
+var bal3 = cerchio(0.06,0.35);
+var bal4 = cerchio(0.065,0.4);
+var bal5 = cerchio(0.045,0.45);
+var bal6 = cerchio(0.02,0.55);
+var bal7 = cerchio(0.06,0.6);
+
+var curveBal1 = [bal1,bal2,bal3,bal4,bal5,bal6,bal7];
+var nodiBal1 = nodi(curveBal1);
+var supBal1 = NUBS(S1)(2)(nodiBal1)(curveBal1);
+var mappaBal1 = MAP(supBal1)(dominioBalaustra);
+
+var balB1 = SIMPLEX_GRID([[-2.115,0.12,-0.03,0.12,-0.03,0.12,-0.03,0.12,-0.03,0.12,-0.03,0.12,-0.03,0.12,-0.03,0.12,-0.03,0.12,-0.03,0.12,-0.03,0.12,-0.03,0.12],[-0.4,0.12],[-0.1,0.1]]);
+var balB2 = SIMPLEX_GRID([[-2.1,1.8],[-0.4,0.12],[0.1]]);
+var balB3 = SIMPLEX_GRID([[-2,2],[-0.4,0.12],[-0.6,0.1]]);
+var balB4 = SIMPLEX_GRID([[-2.94,0.12],[-0.4,0.12],[-0.1,0.5]]);
+
+var balaustra = STRUCT([COLOR(cMattone),balB1,balB2,balB3,balB4,T([0,1])([2.175,0.46])(mappaBal1),T([0,1])([2.175+0.15,0.46])(mappaBal1),T([0,1])([2.175+0.3,0.46])(mappaBal1),
+                        T([0,1])([2.175+0.45,0.46])(mappaBal1),T([0,1])([2.175+0.6,0.46])(mappaBal1),T([0,1])([2.175+0.75,0.46])(mappaBal1),T([0,1])([2.175+0.9,0.46])(mappaBal1),
+                        T([0,1])([2.175+1.05,0.46])(mappaBal1),T([0,1])([2.175+1.2,0.46])(mappaBal1),T([0,1])([2.175+1.35,0.46])(mappaBal1),T([0,1])([2.175+1.5,0.46])(mappaBal1),
+                        T([0,1])([2.175+1.65,0.46])(mappaBal1)]);
+
+var ingresso = STRUCT([balaustra,COLOR(cIntonaco),T([0,1])([4.6,2.8])(S([0])([1.2/1.4])(mappaCil1)),T([0,1])([4.6,2.8])(S([0])([1.2/1.4])(mappaCil2)),muro1,muro2,muro3,muro4,muro5,muro6,muro7,muro8,
                       T([0,1,2])([4.6,2.8,4.5])(S([0])([1.2/1.4])(mapSfera1)),T([1,2])([2.8,4.5])(R([0,2])(PI/2)(mappaCil3)),T([0,1])([4.6,2.8])(R([0,1])(PI/2)(mappaSemic3))]);
-DRAW(ingresso);
+
 
 //solaio
 var solaio1 = SIMPLEX_GRID([[-6.2,4.1],[-0.7,10.9],[-4,0.4]]);
 var solaio2 = SIMPLEX_GRID([[-2.8,7.5],[-11.6,4.3],[-4,0.4]]);
 var solaio3 = SIMPLEX_GRID([[-3.6,2.2],[-8,3.2],[-4,0.4]]);
 
-var solaio = STRUCT([solaio1,solaio2,solaio3]);
-DRAW(solaio);
+var solaio = STRUCT([COLOR(cIntonaco),solaio1,solaio2,solaio3]);
+
 
 //muri interni
 var muroI1 = SIMPLEX_GRID([[-3.6,0.4],[-6.4,2,-0.8,2],[4.5]]);
@@ -679,8 +724,8 @@ var muroI4p = SIMPLEX_GRID([[-2.4,-1.8,0.8,-2.8,0.8],[-11.2,0.4],[-2,2.4,-2,1]])
 var muroI5 = SIMPLEX_GRID([[-2.4,1.6],[-5.2,1.2],[7.4]]); //pilastri
 var muroI6 = SIMPLEX_GRID([[-4,1.8],[-9.2,0.4],[4]]); //divisorio
 
-var muriInterni = STRUCT([muroI1,muroI2,muroI3,muroI4,muroI1p,muroI2p,muroI3p,muroI4p,muroI5,muroI6]);
-DRAW(muriInterni);
+var muriInterni = STRUCT([COLOR(cIntonaco),muroI1,muroI2,muroI3,muroI4,muroI1p,muroI2p,muroI3p,muroI4p,muroI5,muroI6]);
+
 
 //finestre semi-circolari interne
 var semicI1 = semicerchio(2.4,0.4,4.5);
@@ -703,11 +748,11 @@ var mappaSemicI2 = MAP(supSemicI2)(dominioSemic);
 var sogliaSemicI = SIMPLEX_GRID([[1.8],[0.4],[-4.5,0.3]]);
 var colonninaSemicI = SIMPLEX_GRID([[-0.5,0.3],[0.4],[-4.8,2.1]]);
 
-var vetroFSemicI = SIMPLEX_GRID([[1.8],[-0.19,0.02],[-4.8,1.8]]);;
+var vetroFSemicI = COLOR(cVetro)(SIMPLEX_GRID([[1.8],[-0.19,0.02],[-4.8,1.8]]));
 
-var finestreSemicI = STRUCT([T([0,1])([4,8.8]),R([0,1])([PI/2]),vetroFSemicI,sogliaSemicI,colonninaSemicI,mappaSemicI1,mappaSemicI2,
-                            S([0])([-1]),vetroFSemicI,sogliaSemicI,colonninaSemicI,mappaSemicI1,mappaSemicI2]);
-DRAW(finestreSemicI);
+var finestreSemicI = STRUCT([T([0,1])([4,8.8]),R([0,1])([PI/2]),S([0])([-1])(vetroFSemicI),vetroFSemicI,COLOR(cIntonaco),sogliaSemicI,colonninaSemicI,mappaSemicI1,mappaSemicI2,
+                            S([0])([-1]),sogliaSemicI,colonninaSemicI,mappaSemicI1,mappaSemicI2]);
+
 
 //scalette interne
 var hS3 = 0.2; //altezza scalini
@@ -722,8 +767,8 @@ for (var i = 0; i < 10; i++) {
 };
 
 var pianerottolo = SIMPLEX_GRID([[-4,1.8],[-5.2,0.8],[-1.8,0.4]])
-var scaleInterne = STRUCT([pianerottolo,STRUCT(scalinataI),STRUCT(scalinataI2)]);
-DRAW(scaleInterne);
+var scaleInterne = STRUCT([COLOR(cIntonaco),pianerottolo,STRUCT(scalinataI),STRUCT(scalinataI2)]);
+
 
 //volta sala centrale
 var dominioVolta = DOMAIN([[0,1],[0,1]])([20,20]);
@@ -772,8 +817,8 @@ var mappaVolta4 = MAP(volta4)(dominioCilindri);
 var volta5 = cilindro(2.4,1.2,PI,-PI/2);
 var mappaVolta5 = MAP(volta5)(dominioCilindri2);
 
-var volta = STRUCT([voltaCentrale,T([1,2])([6.4,4.5])(R([1,2])([PI/2])(mappaVolta3)),T([1,2])([15.9,4.5])(R([1,2])([PI/2])(mappaVolta4)),T([0,1,2])([3.6,8.8,4.5])(R([0,2])([-PI/2])(mappaVolta5))]);
-DRAW(volta);
+var volta = STRUCT([COLOR(cIntonaco),voltaCentrale,T([1,2])([6.4,4.5])(R([1,2])([PI/2])(mappaVolta3)),T([1,2])([15.9,4.5])(R([1,2])([PI/2])(mappaVolta4)),T([0,1,2])([3.6,8.8,4.5])(R([0,2])([-PI/2])(mappaVolta5))]);
+
 
 //tetti
 var dominioTetto = DOMAIN([[0,1],[0,1]])([24,24]);
@@ -804,17 +849,17 @@ var puntoTetto2 = [8.3,2.7,9]; //punto dove si congunge il tetto della torre
 var curveTetto1 = [segTetto3,segTetto3,segTetto2]; //parte frontale del tetto
 var nodiTetto1 = nodi(curveTetto1);
 var supTetto1 = NUBS(S1)(2)(nodiTetto1)(curveTetto1);
-var mappaTetto1 = MAP(supTetto1)(dominioTetto);
+var mappaTetto1 = COLOR(cTegola)(MAP(supTetto1)(dominioTetto));
 
 var curveTetto2 = [segTetto1,segTetto4,segTetto4,segTetto5]; //parte centrale del tetto
 var nodiTetto2 = nodi(curveTetto2);
 var supTetto2 = NUBS(S1)(2)(nodiTetto2)(curveTetto2);
-var mappaTetto2 = MAP(supTetto2)(dominioTetto);
+var mappaTetto2 = COLOR(cTegola)(MAP(supTetto2)(dominioTetto));
 
 var curveTetto3 = [segTetto6,puntoTetto1,puntoTetto1]; //parte laterale del tetto
 var nodiTetto3 = nodi(curveTetto3);
 var supTetto3 = NUBS(S1)(2)(nodiTetto3)(curveTetto3);
-var mappaTetto3 = MAP(supTetto3)(dominioTetto);
+var mappaTetto3 = COLOR(cTegola)(MAP(supTetto3)(dominioTetto));
 
 var nodiTetto4 = nodi(puntiTetto1); //perimetro tetto della torre
 var supTetto4 = NUBS(S0)(2)(nodiTetto4)(puntiTetto1);
@@ -822,7 +867,7 @@ var supTetto4 = NUBS(S0)(2)(nodiTetto4)(puntiTetto1);
 var curveTetto5 = [supTetto4,puntoTetto2,puntoTetto2]; //tetto della torre
 var nodiTetto5 = nodi(curveTetto5);
 var supTetto5 = NUBS(S1)(2)(nodiTetto5)(curveTetto5);
-var mappaTetto5 = MAP(supTetto5)(dominioTetto);
+var mappaTetto5 = COLOR(cTegola)(MAP(supTetto5)(dominioTetto));
 
 var fregio1 = [[5.8,0.2,7.8],[5.7,0.1,7.8],[5.7,0.1,7.8],[5.7,0.1,8.1],[5.7,0.1,8.1],[5.5,-0.1,8.4]];
 var fregio2 = [[5.8,5.2,7.8],[5.7,5.3,7.8],[5.7,5.3,7.8],[5.7,5.3,8.1],[5.7,5.3,8.1],[5.5,5.5,8.4]];
@@ -841,7 +886,7 @@ var supFregio4 = NUBS(S0)(2)(nodiFregio4)(fregio4);
 var curveTetto6 = [supFregio1,supFregio2,supFregio2,supFregio3,supFregio3,supFregio4,supFregio4,supFregio1]; //fregio della torre
 var nodiTetto6 = nodi(curveTetto6);
 var supTetto6 = NUBS(S1)(2)(nodiTetto6)(curveTetto6);
-var mappaTetto6 = MAP(supTetto6)(dominioTetto);
+var mappaTetto6 = COLOR(cPietra)(MAP(supTetto6)(dominioTetto));
 
 var fregio5 = [[10.8,5.6,6.6],[10.8,5.4,7],[10.8,5.4,7],[10.8,5.2,7],[10.8,5.2,7],[10.8,5,7.4]];
 var fregio6 = [[10.8,5.6,6.6],[11,5.4,7],[11,5.4,7],[11.2,5.2,7],[11.2,5.2,7],[11.4,5,7.4]];
@@ -860,11 +905,11 @@ var supFregio8 = NUBS(S0)(2)(nodiFregio8)(fregio8);
 var curveTetto7 = [supFregio5,supFregio6,supFregio6,supFregio7,supFregio7,supFregio8]; //fregio del tetto
 var nodiTetto7 = nodi(curveTetto7);
 var supTetto7 = NUBS(S1)(2)(nodiTetto7)(curveTetto7);
-var mappaTetto7 = MAP(supTetto7)(dominioTetto);
+var mappaTetto7 = COLOR(cPietra)(MAP(supTetto7)(dominioTetto));
 
-var fregio9 = [[0,0.3,4.5],[0,0.2,4.5],[0,0.2,4.5],[0,0.2,5],[0,0.2,5],[0,0,5.2],[0,0,5.2],[0,-0.2,5.2],[0,-0.2,5.2],[0,-0.2,5.3],[0,-0.2,5.3],[0,-0.3,5.4],[0,-0.3,5.4],[0,0.3,5.4]];
-var fregio10 = [[5.5,0.3,4.5],[5.5,0.2,4.5],[5.5,0.2,4.5],[5.5,0.2,5],[5.5,0.2,5],[5.7,0,5.2],[5.7,0,5.2],[5.9,-0.2,5.2],[5.9,-0.2,5.2],[5.9,-0.2,5.3],[5.9,-0.2,5.3],[6,-0.3,5.4],[6,-0.3,5.4],[6,0.3,5.4]];
-var fregio11 = [[5.5,0.3,4.5],[5.5,0.3,4.5],[5.5,0.3,4.5],[5.5,0.3,5],[5.5,0.3,5],[5.7,0.3,5.2],[5.7,0.3,5.2],[5.9,0.3,5.2],[5.9,0.3,5.2],[5.9,0.3,5.3],[5.9,0.3,5.3],[6,0.3,5.4],[6,0.3,5.4],[6,0.3,5.4]];
+var fregio9 = [[0,0.2,5],[0,0.2,5],[0,0,5.2],[0,0,5.2],[0,-0.2,5.2],[0,-0.2,5.2],[0,-0.2,5.3],[0,-0.2,5.3],[0,-0.3,5.4],[0,-0.3,5.4],[0,0.3,5.4]];
+var fregio10 = [[5.5,0.2,5],[5.5,0.2,5],[5.7,0,5.2],[5.7,0,5.2],[5.9,-0.2,5.2],[5.9,-0.2,5.2],[5.9,-0.2,5.3],[5.9,-0.2,5.3],[6,-0.3,5.4],[6,-0.3,5.4],[6,0.3,5.4]];
+var fregio11 = [[5.5,0.3,5],[5.5,0.3,5],[5.7,0.3,5.2],[5.7,0.3,5.2],[5.9,0.3,5.2],[5.9,0.3,5.2],[5.9,0.3,5.3],[5.9,0.3,5.3],[6,0.3,5.4],[6,0.3,5.4],[6,0.3,5.4]];
 
 var nodiFregio9 = nodi(fregio9);
 var supFregio9 = NUBS(S0)(2)(nodiFregio9)(fregio9);
@@ -873,10 +918,12 @@ var supFregio10 = NUBS(S0)(2)(nodiFregio10)(fregio10);
 var nodiFregio11 = nodi(fregio11);
 var supFregio11 = NUBS(S0)(2)(nodiFregio11)(fregio11);
 
-var curveTetto8 = [supFregio9,supFregio10,supFregio10,supFregio11]; //fregio tra archi e timpano/frontone
+var curveTetto8 = [supFregio9,supFregio10,supFregio10,supFregio11]; //fregio tra archi e timpano
 var nodiTetto8 = nodi(curveTetto8);
 var supTetto8 = NUBS(S1)(2)(nodiTetto8)(curveTetto8);
-var mappaTetto8 = MAP(supTetto8)(dominioTetto);
+var mappaTetto8 = COLOR(cPietra)(MAP(supTetto8)(dominioTetto));
+
+var mappatetto8b = COLOR(cMattone)(SIMPLEX_GRID([[5.5],[-0.2,0.1],[-4.5,0.5]])); //parte color mattone tra archi e timpano
 
 var hF = 2.2;
 var fregio12 = [[0,0.3,5+hF],[0,0.2,5+hF],[0,0.2,5+hF],[0,0.1,5.2+hF],[0,0.1,5.2+hF],[0,-0.2,5.2+hF],[0,-0.2,5.2+hF],[0,-0.2,5.4+hF],[0,-0.2,5.4+hF],[0,-0.4,5.6+hF],[0,-0.4,5.6+hF],[0,0.3,5.6+hF]];
@@ -893,7 +940,7 @@ var supFregio14 = NUBS(S0)(2)(nodiFregio14)(fregio14);
 var curveTetto9 = [supFregio12,supFregio13,supFregio13,supFregio14]; //frontone
 var nodiTetto9 = nodi(curveTetto9);
 var supTetto9 = NUBS(S1)(2)(nodiTetto9)(curveTetto9);
-var mappaTetto9 = MAP(supTetto9)(dominioTetto);
+var mappaTetto9 = COLOR(cPietra)(MAP(supTetto9)(dominioTetto));
 
 //timpano
 var coefAng2 = hF/6.1;
@@ -926,11 +973,11 @@ var segTetto10 = segmentoY(5.8,0.4,6.2,4.2);
 var curveTetto17 = [segTetto7,segTetto8,segTetto8,segTetto9,segTetto9,segTetto10]; //tetto dietro il frontone
 var nodiTetto17 = nodi(curveTetto17);
 var supTetto17 = NUBS(S1)(2)(nodiTetto17)(curveTetto17);
-var mappaTetto17 = MAP(supTetto17)(dominioTetto);
+var mappaTetto17 = COLOR(cTegola)(MAP(supTetto17)(dominioTetto));
 
-var tetti = STRUCT([mappaTetto1,mappaTetto2,mappaTetto3,mappaTetto5,mappaTetto6,mappaTetto7,mappaTetto8,mappaTetto9,mappaTetto10,mappaTetto11,mappaTetto12,mappaTetto13,mappaTetto14,
-                    mappaTetto15,mappaTetto16,mappaTetto17]);
-DRAW(tetti);
+var tetti = STRUCT([mappaTetto1,mappaTetto2,mappaTetto3,mappaTetto5,mappaTetto6,mappaTetto7,mappaTetto8,mappatetto8b,mappaTetto9,mappaTetto17,COLOR(cIntonaco),mappaTetto10,
+                    mappaTetto11,mappaTetto12,mappaTetto13,mappaTetto14,mappaTetto15,mappaTetto16]);
+
 
 //erba
 var dominioErba = DOMAIN([[0,1],[0,1]])([20,20]);
@@ -977,46 +1024,46 @@ var nodiErba3 = nodi(curveErba3);
 var supErba3 = NUBS(S1)(2)(nodiErba3)(curveErba3);
 var mappaErba3 = MAP(supErba3)(dominioErba);
 
-var erba = STRUCT([mappaErba1,mappaErba2,mappaErba3]);
-DRAW(erba);
+var erba = STRUCT([COLOR(cErba),mappaErba1,mappaErba2,mappaErba3]);
+
 
 //finestre
 var fG1 = SIMPLEX_GRID([[0.1,-0.8,0.1],[0.1],[2]]);
 var fG2 = SIMPLEX_GRID([[-0.45,0.1],[0.1],[-0.1,1.1,-0.1,0.6]]);
 var fG3 = SIMPLEX_GRID([[-0.1,0.8],[0.1],[0.1,-1.1,0.1,-0.6,0.1]]);
 var fGImposte = T([1])([-0.55])(SIMPLEX_GRID([[0.05,-0.9,0.05],[0.5],[2]]));
-var vetroFG = SIMPLEX_GRID([[-0.1,0.8],[-0.04,0.02],[-0.1,1.8]]);
+var vetroFG = COLOR(cVetro)(SIMPLEX_GRID([[-0.1,0.8],[-0.04,0.02],[-0.1,1.8]]));
 
 var fP1 = SIMPLEX_GRID([[0.1,-0.8,0.1],[0.1],[0.9]]);
 var fP2 = SIMPLEX_GRID([[-0.45,0.1],[0.1],[-0.1,0.7]]);
 var fP3 = SIMPLEX_GRID([[-0.1,0.8],[0.1],[0.1,-0.7,0.1]]);
 var fPImposte = T([1])([-0.55])(SIMPLEX_GRID([[0.05,-0.9,0.05],[0.5],[0.9]]));
-var vetroFP = SIMPLEX_GRID([[-0.1,0.8],[-0.04,0.02],[-0.1,0.7]]);
+var vetroFP = COLOR(cVetro)(SIMPLEX_GRID([[-0.1,0.8],[-0.04,0.02],[-0.1,0.7]]));
 
 var fS1 = SIMPLEX_GRID([[0.1,-0.8,0.1],[0.1],[1]]);
 var fS2 = SIMPLEX_GRID([[-0.1,0.8],[0.1],[0.1,-0.8,0.1]]);
-var vetroFS = SIMPLEX_GRID([[-0.1,0.8],[-0.04,0.02],[-0.1,0.8]]);
+var vetroFS = COLOR(cVetro)(SIMPLEX_GRID([[-0.1,0.8],[-0.04,0.02],[-0.1,0.8]]));
 
 var pF1 = SIMPLEX_GRID([[0.05,-0.65,0.1],[0.1],[2.5]]);
 var pF2 = SIMPLEX_GRID([[-0.05,0.65],[0.1],[0.1,-2.3,0.1]]);
 var pFImposte = T([1])([-0.85])(SIMPLEX_GRID([[-0.75,0.05],[0.8],[2.5]]));
-var vetroPF = SIMPLEX_GRID([[-0.05,0.65],[-0.04,0.02],[-0.1,2.3]]);
+var vetroPF = COLOR(cVetro)(SIMPLEX_GRID([[-0.05,0.65],[-0.04,0.02],[-0.1,2.3]]));
 
 var pR1 = SIMPLEX_GRID([[0.05,-0.35,0.1],[0.1],[2]]);
 var pR2 = SIMPLEX_GRID([[-0.05,0.35],[0.1],[0.1,-1.8,0.1]]);
 var pRImposte = SIMPLEX_GRID([[-0.45,0.05],[-0.15,0.5],[2]]);
-var vetroPR = SIMPLEX_GRID([[-0.05,0.35],[-0.04,0.02],[-0.1,1.8]]);
+var vetroPR = COLOR(cVetro)(SIMPLEX_GRID([[-0.05,0.35],[-0.04,0.02],[-0.1,1.8]]));
 
-var fGrande = STRUCT([fG1,fG2,fG3,fGImposte,vetroFG]);
-var fPiccola = STRUCT([fP1,fP2,fP3,fPImposte,vetroFP]); //0.9m
-var fSeminter = STRUCT([fS1,fS2,vetroFS]); //1m
-var fBianca = SIMPLEX_GRID([[1],[0.1],[1]]); // da colorare bianca come il muro
-var fPortaFronte = STRUCT([T([1])([4.85]),pF1,pF2,pFImposte,vetroPF]);
-var fPortaRetro = STRUCT([T([1])([16.1]),pR1,pR2,pRImposte,vetroPR]);
+var fGrande = STRUCT([vetroFG,COLOR(cLegno),fG1,fG2,fG3,fGImposte]);
+var fPiccola = STRUCT([vetroFP,COLOR(cLegno),fP1,fP2,fP3,fPImposte]); //0.9m
+var fSeminter = STRUCT([vetroFS,COLOR(cLegno),fS1,fS2]); //1m
+var fBianca = COLOR(cIntonaco)(SIMPLEX_GRID([[1],[0.1],[1]]));
+var fPortaFronte = STRUCT([T([1])([4.85]),vetroPF,COLOR(cLegno),pF1,pF2,pFImposte]);
+var fPortaRetro = STRUCT([T([1])([16.1]),vetroPR,COLOR(cLegno),pR1,pR2,pRImposte]);
 
 var lPI = 3.6-s2-s2;
-var ImpostePortaIngresso = SIMPLEX_GRID([[-(6.2-s1-lPI/2),lPI/2],[-(1+s2),0.05,-(lPI-0.1),0.05],[2]]);
-var ImpostePortaSeminterrato = T([0,1,2])([7.8,15.4,-hS-1.4])(SIMPLEX_GRID([[0.05,-0.9,0.05],[0.5],[1.2]]));
+var ImpostePortaIngresso = COLOR(cLegno)(SIMPLEX_GRID([[-(6.2-s1-lPI/2),lPI/2],[-(1+s2),0.05,-(lPI-0.1),0.05],[2]]));
+var ImpostePortaSeminterrato = COLOR(cLegno)(T([0,1,2])([7.8,15.4,-hS-1.4])(SIMPLEX_GRID([[0.05,-0.9,0.05],[0.5],[1.2]])));
 
 var finestre = STRUCT([T([0,1,2])([7.8,0.4,0.8])(fGrande),T([0,1,2])([7.8,0.4,5.7])(fGrande),
                       T([0,1,2])([10.6,2.2,0.8])(R([0,1])([PI/2])(fGrande)),T([0,1,2])([10.6,2.2,5.7])(R([0,1])([PI/2])(fGrande)),
@@ -1028,4 +1075,10 @@ var finestre = STRUCT([T([0,1,2])([7.8,0.4,0.8])(fGrande),T([0,1,2])([7.8,0.4,5.
                       T([0,1,2])([10.6,2.2,-hS-1.2])(R([0,1])([PI/2])(fBianca)),T([0,1,2])([10.6,5.9,-hS-1.2])(R([0,1])([PI/2])(fSeminter)),
                       T([0,1,2])([10.6,9.7,-hS-1.2])(R([0,1])([PI/2])(fSeminter)),T([0,1,2])([10.6,13.4,-hS-1.2])(R([0,1])([PI/2])(fSeminter)),
                       fPortaFronte,fPortaRetro,ImpostePortaIngresso,ImpostePortaSeminterrato]);
-DRAW(finestre);
+
+
+//assemblo tutto in un unica STRUCT e disegno (il modello è molto pesante, commentare la parte riflessa per velocizzarne la visualizzazione)
+var modello = STRUCT([scalinate,base,muriEsterni,colonnato,ingresso,solaio,muriInterni,finestreSemicI,scaleInterne,volta,tetti,erba,finestre
+                      ,S([0])([-1]),scalinate,base,muriEsterni,colonnato,ingresso,solaio,muriInterni,finestreSemicI,scaleInterne,volta,tetti,erba,finestre
+                      ]);
+DRAW(modello);
